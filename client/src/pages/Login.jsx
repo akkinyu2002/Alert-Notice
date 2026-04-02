@@ -35,10 +35,10 @@ export default function Login({ adminOnly = false }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#d8f3e8] via-[#edf7ef] to-[#ccead8]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#dff5eb] via-[#eef8f3] to-[#d3ecdf]"></div>
       <div className="relative glass-card p-8 w-full max-w-md animate-fade-in">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-br from-danger-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white">
+          <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white shadow-[0_10px_24px_rgba(20,101,79,0.25)]">
             <Icon name="alert" size={24} />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">{adminOnly ? 'Admin Sign In' : 'Welcome Back'}</h1>
