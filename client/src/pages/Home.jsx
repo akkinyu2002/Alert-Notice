@@ -97,15 +97,15 @@ export default function Home() {
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-[#edf7ef] text-slate-900 pb-16">
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
-        <div className="pointer-events-none absolute -top-8 -left-8 w-56 h-56 rounded-full bg-[#c7eed7]/45 blur-3xl"></div>
-        <div className="pointer-events-none absolute top-24 right-4 w-64 h-64 rounded-full bg-[#d3f3e2]/40 blur-3xl"></div>
+    <div className="min-h-screen bg-transparent text-slate-900 pb-16 relative z-[1]">
+      <div className="page-container pt-6 space-y-6">
+        <div className="pointer-events-none absolute -top-8 -left-8 w-56 h-56 rounded-full bg-[#c7eed7]/50 blur-3xl"></div>
+        <div className="pointer-events-none absolute top-24 right-4 w-64 h-64 rounded-full bg-[#d3f3e2]/45 blur-3xl"></div>
 
-        <section className="relative rounded-[30px] border border-[#d6ddd1] bg-white p-4 sm:p-6 lg:p-7 shadow-[0_18px_50px_rgba(37,55,29,0.08)]">
+        <section className="relative surface-elevated p-4 sm:p-6 lg:p-7">
           <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="rounded-[24px] border border-[#dde4d7] bg-[#f7faf4] p-5 sm:p-6 lg:p-7">
-              <span className="inline-flex items-center gap-2 rounded-full bg-[#daf5e8] px-3 py-1 text-xs font-semibold text-[#1e6149]">
+            <div className="surface-subtle p-5 sm:p-6 lg:p-7">
+              <span className="tag-soft gap-2">
                 <span className="h-2 w-2 rounded-full bg-[#1f946b]"></span>
                 Fast Public Alert
               </span>
@@ -121,35 +121,35 @@ export default function Home() {
               <div className="mt-6 flex flex-wrap gap-3">
                 {!user ? (
                   <>
-                    <Link to="/send-alert" className="inline-flex items-center gap-2 rounded-full bg-[#0e7b67] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#0a6253] transition-colors">
+                    <Link to="/send-alert" className="btn-primary px-5 py-2.5">
                       Send Alert Now
                       <Icon name="arrow" size={14} />
                     </Link>
-                    <Link to="/register" className="inline-flex items-center gap-2 rounded-full border border-[#cfe0d6] bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-[#f2f8f3] transition-colors">
+                    <Link to="/register" className="btn-ghost px-5 py-2.5">
                       Create Account
                     </Link>
-                    <Link to="/login" className="inline-flex items-center gap-2 rounded-full border border-[#cfd9cd] bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-[#f2f6ef] transition-colors">
+                    <Link to="/login" className="btn-ghost px-5 py-2.5">
                       Login
                     </Link>
                   </>
                 ) : (
                   <>
-                    <Link to="/send-alert" className="inline-flex items-center gap-2 rounded-full bg-[#0e7b67] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#0a6253] transition-colors">
+                    <Link to="/send-alert" className="btn-primary px-5 py-2.5">
                       Send Alert
                       <Icon name="arrow" size={14} />
                     </Link>
-                    <Link to="/emergency-alerts" className="inline-flex items-center gap-2 rounded-full border border-[#cfd9cd] bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-[#f2f6ef] transition-colors">
+                    <Link to="/emergency-alerts" className="btn-ghost px-5 py-2.5">
                       View Emergency Alerts
                       <Icon name="arrow" size={14} />
                     </Link>
-                    <Link to="/blood-requests" className="inline-flex items-center gap-2 rounded-full border border-[#cfd9cd] bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-[#f2f6ef] transition-colors">
+                    <Link to="/blood-requests" className="btn-ghost px-5 py-2.5">
                       Open Blood Requests
                     </Link>
                   </>
                 )}
               </div>
 
-              <div className="mt-6 flex items-center gap-3 rounded-2xl border border-[#dde4d7] bg-white px-4 py-3">
+              <div className="mt-6 flex items-center gap-3 rounded-2xl border border-[#d7e5dc] bg-white px-4 py-3">
                 <div className="flex -space-x-2">
                   {[1, 2, 3].map((i) => (
                     <span
@@ -184,7 +184,7 @@ export default function Home() {
                     { icon: 'tower', label: 'Cell tower fallback targeting', detail: 'Broadcast to nearby towers if needed' },
                     { icon: 'building', label: 'Government notification path', detail: 'Authority workflow from same alert' },
                   ].map((item) => (
-                    <div key={item.label} className="rounded-2xl bg-white/12 border border-white/20 px-4 py-3 backdrop-blur">
+                    <div key={item.label} className="rounded-2xl bg-white/13 border border-white/25 px-4 py-3 backdrop-blur">
                       <p className="inline-flex items-center gap-2 text-sm font-semibold">
                         <Icon name={item.icon} size={16} className="text-[#d9f4b3]" />
                         {item.label}
@@ -215,7 +215,7 @@ export default function Home() {
                 text: 'Supports alerting when location sharing is disabled.',
               },
             ].map((item) => (
-              <div key={item.title} className="rounded-2xl border border-[#dde4d7] bg-[#f9fbf7] px-4 py-4">
+              <div key={item.title} className="rounded-2xl border border-[#d8e7de] bg-[#f7fcf9] px-4 py-4">
                 <p className="inline-flex items-center gap-2 text-sm font-semibold text-slate-800">
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-[#e6f4d5] text-[#2d6147]">
                     <Icon name={item.icon} size={15} />
@@ -228,17 +228,17 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-[28px] border border-[#d6ddd1] bg-white p-5 sm:p-6 shadow-[0_14px_40px_rgba(37,55,29,0.07)]">
+        <section className="surface-elevated p-5 sm:p-6">
           <div className="flex items-center justify-between gap-3 mb-4">
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Concern Categories</h2>
-            <span className="inline-flex items-center rounded-full bg-[#d5ec9c] px-3 py-1 text-xs font-semibold text-[#355126]">
+            <span className="tag-soft">
               Any issue, one report flow
             </span>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             {concernTiles.map((item) => (
-              <div key={item.title} className="rounded-2xl border border-[#dce4d6] bg-[#f8faf6] p-4 hover:bg-[#f2f7ec] transition-colors">
+              <div key={item.title} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4 hover:bg-[#eff7f2] transition-colors">
                 <div className="flex items-start justify-between gap-3">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-[#d7e0d3] text-[#29614a]">
                     <Icon name={item.icon} size={17} />
@@ -252,11 +252,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-[28px] border border-[#d6ddd1] bg-white p-5 sm:p-6 shadow-[0_14px_40px_rgba(37,55,29,0.07)]">
+        <section className="surface-elevated p-5 sm:p-6">
           <div className="flex items-center justify-between gap-3 mb-4">
             <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Live Network Snapshot</h2>
             {user ? (
-              <span className="inline-flex items-center rounded-full bg-[#e3f4d8] px-3 py-1 text-xs font-semibold text-[#2f6e45]">
+              <span className="tag-soft">
                 Connected
               </span>
             ) : (
@@ -274,7 +274,7 @@ export default function Home() {
                 { label: 'Active Alerts', value: stats.activeAlerts, icon: 'alert' },
                 { label: 'Blood Requests', value: stats.activeBloodRequests, icon: 'blood' },
               ].map((card) => (
-                <div key={card.label} className="rounded-2xl border border-[#dce4d6] bg-[#f8faf6] p-4">
+                <div key={card.label} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf6de] text-[#29614a]">
                     <Icon name={card.icon} size={16} />
                   </span>
@@ -284,15 +284,15 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-[#dce4d6] bg-[#f8faf6] p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <p className="text-sm text-slate-600 max-w-2xl">
                 Sign in to see active emergency counts, blood request load, and donor availability in real time.
               </p>
               <div className="flex items-center gap-2">
-                <Link to="/login" className="inline-flex items-center rounded-full border border-[#cfd9cd] bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-[#f2f6ef] transition-colors">
+                <Link to="/login" className="btn-ghost px-4 py-2">
                   Login
                 </Link>
-                <Link to="/register" className="inline-flex items-center rounded-full bg-[#1f946b] px-4 py-2 text-sm font-semibold text-white hover:bg-[#197657] transition-colors">
+                <Link to="/register" className="btn-primary px-4 py-2">
                   Register
                 </Link>
               </div>
@@ -301,13 +301,13 @@ export default function Home() {
         </section>
 
         <section className="grid gap-4 lg:grid-cols-2">
-          <div className="rounded-[26px] border border-[#d6ddd1] bg-white p-5 sm:p-6 shadow-[0_14px_40px_rgba(37,55,29,0.07)]">
+          <div className="surface-elevated p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-slate-900 inline-flex items-center gap-2">
                 <Icon name="alert" size={20} className="text-[#1f6b55]" />
                 Recent Emergencies
               </h2>
-              <Link to={user ? '/emergency-alerts' : '/login'} className="text-sm font-semibold text-[#1f7a61] hover:text-[#165a48]">
+              <Link to={user ? '/emergency-alerts' : '/login'} className="text-sm font-semibold link-accent">
                 View all
               </Link>
             </div>
@@ -316,7 +316,7 @@ export default function Home() {
               alerts.length > 0 ? (
                 <div className="space-y-3">
                   {alerts.map((alert) => (
-                    <div key={alert.id} className="rounded-2xl border border-[#dce4d6] bg-[#f8faf6] p-4">
+                    <div key={alert.id} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <h3 className="text-sm font-semibold text-slate-900">{alert.title}</h3>
@@ -341,13 +341,13 @@ export default function Home() {
             )}
           </div>
 
-          <div className="rounded-[26px] border border-[#d6ddd1] bg-white p-5 sm:p-6 shadow-[0_14px_40px_rgba(37,55,29,0.07)]">
+          <div className="surface-elevated p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold text-slate-900 inline-flex items-center gap-2">
                 <Icon name="blood" size={20} className="text-[#1f6b55]" />
                 Urgent Blood Requests
               </h2>
-              <Link to={user ? '/blood-requests' : '/login'} className="text-sm font-semibold text-[#1f7a61] hover:text-[#165a48]">
+              <Link to={user ? '/blood-requests' : '/login'} className="text-sm font-semibold link-accent">
                 View all
               </Link>
             </div>
@@ -356,7 +356,7 @@ export default function Home() {
               bloodRequests.length > 0 ? (
                 <div className="space-y-3">
                   {bloodRequests.map((request) => (
-                    <div key={request.id} className="rounded-2xl border border-[#dce4d6] bg-[#f8faf6] p-4">
+                    <div key={request.id} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <h3 className="text-sm font-semibold text-slate-900">{request.hospital_name}</h3>
@@ -384,11 +384,11 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="rounded-[28px] border border-[#d6ddd1] bg-white p-5 sm:p-6 shadow-[0_14px_40px_rgba(37,55,29,0.07)]">
+        <section className="surface-elevated p-5 sm:p-6">
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900">How It Works</h2>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             {flowSteps.map((step, index) => (
-              <div key={step.title} className="rounded-2xl border border-[#dce4d6] bg-[#f8faf6] p-4">
+              <div key={step.title} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
                 <p className="inline-flex items-center gap-2 text-sm font-semibold text-slate-800">
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-[#e6f4d5] text-[#2d6147]">
                     <Icon name={step.icon} size={15} />
