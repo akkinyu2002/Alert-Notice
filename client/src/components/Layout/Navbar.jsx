@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import Icon from '../ui/Icon';
 
 const navLinks = [
-  { to: '/', label: 'Home', icon: 'home' },
-  { to: '/send-alert', label: 'Send Alert', icon: 'alert' },
-  { to: '/emergency-alerts', label: 'Emergencies', icon: 'alert' },
-  { to: '/blood-requests', label: 'Blood Requests', icon: 'blood' },
+  { to: '/', label: 'Home' },
+  { to: '/send-alert', label: 'Send Alert' },
+  { to: '/emergency-alerts', label: 'Emergencies' },
+  { to: '/blood-requests', label: 'Blood Requests' },
 ];
 
 const adminLinks = [
-  { to: '/admin', label: 'Dashboard', icon: 'dashboard' },
-  { to: '/admin/create-alert', label: 'Create Alert', icon: 'plus' },
-  { to: '/admin/create-blood-request', label: 'Blood Request', icon: 'blood' },
-  { to: '/admin/users', label: 'Users', icon: 'users' },
+  { to: '/admin', label: 'Dashboard' },
+  { to: '/admin/create-alert', label: 'Create Alert' },
+  { to: '/admin/create-blood-request', label: 'Blood Request' },
+  { to: '/admin/users', label: 'Users' },
 ];
 
 export default function Navbar() {
@@ -66,8 +65,8 @@ export default function Navbar() {
         <div className="px-3 sm:px-4">
           <div className="flex items-center justify-between min-h-[64px] gap-2">
             <Link to="/" className="flex items-center gap-2.5 shrink-0">
-              <div className="w-9 h-9 rounded-xl bg-[#d7f2e5] text-[#155741] flex items-center justify-center border border-[#b7dfcd]">
-                <Icon name="alert" size={17} />
+              <div className="w-9 h-9 rounded-xl bg-[#d7f2e5] text-[#155741] flex items-center justify-center border border-[#b7dfcd] text-[11px] font-bold tracking-wide">
+                NA
               </div>
               <div className="leading-tight">
                 <p className="text-sm font-semibold text-slate-900">Nepal Alert</p>
@@ -80,9 +79,8 @@ export default function Navbar() {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-full text-sm font-medium transition-colors ${linkClass(link.to)}`}
+                  className={`inline-flex items-center px-3 py-2 rounded-full text-sm font-medium transition-colors ${linkClass(link.to)}`}
                 >
-                  <Icon name={link.icon} size={14} />
                   {link.label}
                 </Link>
               ))}
@@ -103,9 +101,8 @@ export default function Navbar() {
                         <Link
                           key={link.to}
                           to={link.to}
-                          className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${linkClass(link.to, true)}`}
+                          className={`inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${linkClass(link.to, true)}`}
                         >
-                          <Icon name={link.icon} size={12} />
                           {link.label}
                         </Link>
                       ))}
@@ -127,10 +124,10 @@ export default function Navbar() {
 
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-xl border border-[#cde0d4] text-slate-600 hover:bg-[#e9f6ef]"
+              className="lg:hidden inline-flex h-10 min-w-[80px] px-3 items-center justify-center rounded-xl border border-[#cde0d4] text-slate-700 hover:bg-[#e9f6ef] text-sm font-semibold"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
-              <Icon name={mobileOpen ? 'close' : 'menu'} size={18} />
+              {mobileOpen ? 'Close' : 'Menu'}
             </button>
           </div>
 
@@ -142,9 +139,8 @@ export default function Navbar() {
                     key={link.to}
                     to={link.to}
                     onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${linkClass(link.to)}`}
+                    className={`flex items-center px-3 py-2 rounded-xl text-sm font-medium ${linkClass(link.to)}`}
                   >
-                    <Icon name={link.icon} size={14} />
                     {link.label}
                   </Link>
                 ))}
@@ -158,9 +154,8 @@ export default function Navbar() {
                         key={link.to}
                         to={link.to}
                         onClick={() => setMobileOpen(false)}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium ${linkClass(link.to, true)}`}
+                        className={`flex items-center px-3 py-2 rounded-xl text-sm font-medium ${linkClass(link.to, true)}`}
                       >
-                        <Icon name={link.icon} size={14} />
                         {link.label}
                       </Link>
                     ))}
@@ -173,9 +168,8 @@ export default function Navbar() {
                     <Link
                       to="/profile"
                       onClick={() => setMobileOpen(false)}
-                      className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-[#e9f6ef]"
+                      className="flex items-center px-3 py-2 rounded-xl text-sm font-medium text-slate-700 hover:bg-[#e9f6ef]"
                     >
-                      <Icon name="user" size={14} />
                       Profile
                     </Link>
                     <button
