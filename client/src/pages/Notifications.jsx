@@ -46,7 +46,7 @@ export default function Notifications() {
           {unreadCount > 0 && <span className="badge bg-danger-500 text-white border-none">{unreadCount}</span>}
         </div>
         {unreadCount > 0 && (
-          <button onClick={handleMarkAllRead} className="text-sm text-primary-400 hover:text-primary-300">
+          <button onClick={handleMarkAllRead} className="text-sm font-semibold link-accent">
             Mark all read
           </button>
         )}
@@ -60,11 +60,11 @@ export default function Notifications() {
             key={notif.id}
             onClick={() => !notif.read && handleMarkRead(notif.id)}
             className={`glass-card p-4 flex items-start gap-4 cursor-pointer transition-all duration-200 animate-fade-in ${
-              !notif.read ? 'border-l-4 border-l-primary-500 bg-[#eef4e7]' : 'opacity-75 hover:opacity-95'
+              !notif.read ? 'border-l-4 border-l-primary-500 bg-[#edf8f3]' : 'opacity-80 hover:opacity-100'
             }`}
             style={{ animationDelay: `${i * 50}ms` }}
           >
-            <div className="w-9 h-9 rounded-lg bg-[#f8faf6] border border-[#d7dfd2] text-slate-700 flex items-center justify-center mt-0.5">
+            <div className="w-9 h-9 rounded-lg bg-[#f7fcf9] border border-[#d3e3d9] text-slate-700 flex items-center justify-center mt-0.5">
               <Icon name={typeIcons[notif.type] || 'bell'} size={18} />
             </div>
             <div className="flex-1 min-w-0">
