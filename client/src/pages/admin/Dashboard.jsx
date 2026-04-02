@@ -69,7 +69,7 @@ export default function AdminDashboard() {
             {['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'].map((bg) => {
               const stat = stats.bloodGroupStats.find((s) => s.blood_group === bg);
               return (
-                <div key={bg} className="text-center p-3 rounded-xl bg-[#f8faf6]">
+                <div key={bg} className="text-center p-3 rounded-xl bg-[#f7fcf9] border border-[#d9e7df]">
                   <p className="text-lg font-bold text-danger-400">{bg}</p>
                   <p className="text-2xl font-bold text-slate-900">{stat?.count || 0}</p>
                   <p className="text-xs text-slate-500">donors</p>
@@ -84,14 +84,14 @@ export default function AdminDashboard() {
         <div className="glass-card p-6 animate-fade-in">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-900 font-semibold">Recent Emergency Alerts</h3>
-            <Link to="/admin/create-alert" className="text-xs text-primary-400 inline-flex items-center gap-1">
+            <Link to="/admin/create-alert" className="text-xs link-accent inline-flex items-center gap-1">
               <Icon name="plus" size={12} />
               Create
             </Link>
           </div>
           <div className="space-y-3">
             {alerts.map((a) => (
-              <div key={a.id} className="flex items-center justify-between p-3 rounded-xl bg-[#f8faf6]">
+              <div key={a.id} className="flex items-center justify-between p-3 rounded-xl bg-[#f7fcf9] border border-[#d9e7df]">
                 <div>
                   <p className="text-slate-900 text-sm font-medium">{a.title}</p>
                   <p className="text-xs text-slate-500">
@@ -108,14 +108,14 @@ export default function AdminDashboard() {
         <div className="glass-card p-6 animate-fade-in" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-900 font-semibold">Recent Blood Requests</h3>
-            <Link to="/admin/create-blood-request" className="text-xs text-primary-400 inline-flex items-center gap-1">
+            <Link to="/admin/create-blood-request" className="text-xs link-accent inline-flex items-center gap-1">
               <Icon name="plus" size={12} />
               Create
             </Link>
           </div>
           <div className="space-y-3">
             {bloodReqs.map((r) => (
-              <div key={r.id} className="flex items-center justify-between p-3 rounded-xl bg-[#f8faf6]">
+              <div key={r.id} className="flex items-center justify-between p-3 rounded-xl bg-[#f7fcf9] border border-[#d9e7df]">
                 <div>
                   <p className="text-slate-900 text-sm font-medium">{r.hospital_name}</p>
                   <p className="text-xs text-slate-500">
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="text-danger-400 font-bold text-sm">{r.blood_group}</span>
-                  <Link to={`/admin/responses/${r.id}`} className="text-xs text-primary-400 hover:text-primary-300">
+                  <Link to={`/admin/responses/${r.id}`} className="text-xs link-accent">
                     View
                   </Link>
                 </div>
