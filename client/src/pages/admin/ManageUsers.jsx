@@ -51,7 +51,7 @@ export default function ManageUsers() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-[#d7dfd2] text-left">
+              <tr className="border-b border-[#d3e3d9] text-left">
                 <th className="px-4 py-3 text-slate-600 font-medium">Name</th>
                 <th className="px-4 py-3 text-slate-600 font-medium">Email</th>
                 <th className="px-4 py-3 text-slate-600 font-medium">Phone</th>
@@ -63,7 +63,7 @@ export default function ManageUsers() {
             </thead>
             <tbody>
               {filtered.map((u) => (
-                <tr key={u.id} className="border-b border-[#e4ebdf] hover:bg-[#f1f6eb] transition-colors">
+                <tr key={u.id} className="border-b border-[#dfe9e2] hover:bg-[#eff7f2] transition-colors">
                   <td className="px-4 py-3 text-slate-900 font-medium">{u.name}</td>
                   <td className="px-4 py-3 text-slate-600">{u.email}</td>
                   <td className="px-4 py-3 text-slate-600">{u.phone || '-'}</td>
@@ -71,7 +71,7 @@ export default function ManageUsers() {
                   <td className="px-4 py-3 text-slate-600">{u.district || '-'}</td>
                   <td className="px-4 py-3">{u.available_to_donate ? <span className="badge-active">Yes</span> : <span className="badge-expired">No</span>}</td>
                   <td className="px-4 py-3">
-                    <span className={`badge ${u.role === 'admin' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' : u.role === 'hospital' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' : 'bg-[#eff4e9] text-slate-600 border border-[#d7dfd2]'}`}>
+                    <span className={`badge ${u.role === 'admin' ? 'bg-[#ffe9cf] text-[#9a5a14] border border-[#ffd6aa]' : u.role === 'hospital' ? 'bg-[#dff1ea] text-[#1c6d55] border border-[#c7e7da]' : 'bg-[#eff7f2] text-slate-600 border border-[#d3e3d9]'}`}>
                       {u.role}
                     </span>
                   </td>
