@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getBloodRequests } from '../services/api';
-import Icon from '../components/ui/Icon';
 
 const urgencyConfig = {
   critical: { class: 'badge-critical', bg: 'border-l-danger-500' },
@@ -24,10 +23,7 @@ export default function BloodRequests() {
 
   return (
     <div className="page-container">
-      <h1 className="section-title inline-flex items-center gap-2">
-        <Icon name="blood" size={24} className="text-danger-400" />
-        Blood Requests
-      </h1>
+      <h1 className="section-title">Blood Requests</h1>
 
       {requests.length === 0 && <div className="glass-card p-12 text-center text-slate-600">No active blood requests right now.</div>}
 
@@ -48,24 +44,12 @@ export default function BloodRequests() {
             <h3 className="text-slate-900 font-semibold text-lg mb-1">{req.hospital_name}</h3>
             <p className="text-sm text-slate-600 mb-3">{req.units_needed} unit(s) needed</p>
             <div className="space-y-1 text-xs text-slate-500">
-              <p className="inline-flex items-center gap-1">
-                <Icon name="phone" size={13} />
-                {req.contact_number}
-              </p>
-              <p className="inline-flex items-center gap-1">
-                <Icon name="location" size={13} />
-                {req.radius_km}km radius
-              </p>
-              <p className="inline-flex items-center gap-1">
-                <Icon name="clock" size={13} />
-                Expires: {new Date(req.expires_at).toLocaleDateString()}
-              </p>
+              <p>{req.contact_number}</p>
+              <p>{req.radius_km}km radius</p>
+              <p>Expires: {new Date(req.expires_at).toLocaleDateString()}</p>
             </div>
             <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#dde9e1]">
-              <span className="text-xs text-success-400 inline-flex items-center gap-1">
-                <Icon name="check" size={13} />
-                {req.willing_count || 0} willing
-              </span>
+              <span className="text-xs text-success-500">{req.willing_count || 0} willing</span>
               <span className="text-xs text-slate-500">{req.total_responses || 0} total responses</span>
             </div>
           </Link>
