@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght,SOFT@9..144,500..700,50&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,29 +6,61 @@
 
 @layer base {
   :root {
-    --health-bg: #edf7f1;
+    --font-body: 'Manrope', 'Segoe UI', sans-serif;
+    --font-display: 'Fraunces', Georgia, serif;
+    --health-bg: #ecf6f1;
     --health-bg-soft: #f7fcf9;
     --health-surface-border: #d2e3d8;
     --health-primary: #177f62;
     --health-primary-strong: #14654f;
+    --health-text: #152b24;
   }
 
   body {
-    @apply font-sans antialiased;
+    @apply antialiased;
+    font-family: var(--font-body);
     background:
-      radial-gradient(1200px 520px at 10% -15%, rgba(171, 229, 206, 0.22), transparent 60%),
-      radial-gradient(980px 460px at 90% -10%, rgba(188, 228, 214, 0.2), transparent 55%),
+      radial-gradient(980px 460px at 8% -10%, rgba(155, 219, 194, 0.26), transparent 62%),
+      radial-gradient(880px 420px at 92% -8%, rgba(182, 222, 204, 0.23), transparent 56%),
+      linear-gradient(180deg, #eff8f3 0%, #edf7f1 34%, #ecf5ef 100%),
       var(--health-bg);
-    color: #0f172a;
+    color: var(--health-text);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.18;
+    background-image:
+      linear-gradient(120deg, rgba(255, 255, 255, 0.33) 0%, rgba(255, 255, 255, 0) 60%),
+      radial-gradient(rgba(24, 66, 52, 0.11) 0.5px, transparent 0.5px);
+    background-size: 100% 100%, 3px 3px;
+    z-index: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  .section-title {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    color: #0f2b22;
+  }
+
+  ::selection {
+    background: rgba(23, 127, 98, 0.2);
+    color: #0f2b22;
   }
 }
 
 @layer components {
   .glass-card {
-    background: #ffffff;
+    background: linear-gradient(180deg, #ffffff 0%, #fcfffd 100%);
     border: 1px solid var(--health-surface-border);
-    border-radius: 1.5rem;
-    box-shadow: 0 14px 40px rgba(16, 76, 58, 0.09);
+    border-radius: 1.4rem;
+    box-shadow: 0 14px 40px rgba(16, 76, 58, 0.1);
   }
 
   .glass-card-hover {
@@ -37,10 +69,30 @@
   }
 
   .glass-card-hover:hover {
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.003);
     box-shadow: 0 18px 45px rgba(16, 76, 58, 0.13);
     border-color: #bdd8c9;
     background: #fbfefc;
+  }
+
+  .surface-elevated {
+    @apply rounded-[28px] border bg-white;
+    border-color: #d0e2d7;
+    box-shadow: 0 16px 48px rgba(16, 76, 58, 0.1);
+  }
+
+  .surface-subtle {
+    @apply rounded-2xl border;
+    border-color: #d6e5dc;
+    background: #f7fcf9;
+  }
+
+  .tag-soft {
+    @apply inline-flex items-center rounded-full text-xs font-semibold;
+    background: #daf3e8;
+    color: #1b624b;
+    border: 1px solid #c5e7d7;
+    padding: 0.24rem 0.75rem;
   }
 
   .btn-primary {
@@ -49,11 +101,12 @@
     background: var(--health-primary);
     color: #ffffff;
     padding: 0.62rem 1.25rem;
-    transition: background-color 0.18s ease;
+    transition: background-color 0.18s ease, transform 0.18s ease;
   }
 
   .btn-primary:hover {
     background: var(--health-primary-strong);
+    transform: translateY(-1px);
   }
 
   .btn-danger {
@@ -62,11 +115,12 @@
     background: #d93737;
     color: #ffffff;
     padding: 0.62rem 1.25rem;
-    transition: background-color 0.18s ease;
+    transition: background-color 0.18s ease, transform 0.18s ease;
   }
 
   .btn-danger:hover {
     background: #b92e2e;
+    transform: translateY(-1px);
   }
 
   .btn-success {
@@ -75,11 +129,12 @@
     background: #228f5d;
     color: #ffffff;
     padding: 0.62rem 1.25rem;
-    transition: background-color 0.18s ease;
+    transition: background-color 0.18s ease, transform 0.18s ease;
   }
 
   .btn-success:hover {
     background: #1d724d;
+    transform: translateY(-1px);
   }
 
   .btn-ghost {
@@ -89,12 +144,13 @@
     background: #ffffff;
     color: #1e4035;
     padding: 0.62rem 1.25rem;
-    transition: background-color 0.18s ease, border-color 0.18s ease;
+    transition: background-color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
   }
 
   .btn-ghost:hover {
     background: #edf8f2;
     border-color: #aecdba;
+    transform: translateY(-1px);
   }
 
   .btn-primary:disabled,
@@ -184,12 +240,21 @@
   }
 
   .page-container {
-    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6;
+    @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-[1];
   }
 
   .section-title {
     @apply text-2xl font-bold mb-6;
-    color: #0f172a;
+    color: #0f2b22;
+  }
+
+  .link-accent {
+    color: #1d775e;
+    transition: color 0.18s ease;
+  }
+
+  .link-accent:hover {
+    color: #14513f;
   }
 }
 
