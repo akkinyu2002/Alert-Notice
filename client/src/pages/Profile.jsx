@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { updateProfile } from '../services/api';
-import Icon from '../components/ui/Icon';
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -57,10 +56,7 @@ export default function Profile() {
 
   return (
     <div className="page-container max-w-2xl">
-      <h1 className="section-title inline-flex items-center gap-2">
-        <Icon name="user" size={24} className="text-primary-400" />
-        My Profile
-      </h1>
+      <h1 className="section-title">My Profile</h1>
       <div className="glass-card p-8 animate-fade-in">
         {message && (
           <div className={`rounded-xl p-3 mb-4 text-sm ${message.includes('success') ? 'bg-success-500/10 border border-success-500/20 text-success-400' : 'bg-danger-500/10 border border-danger-500/20 text-danger-400'}`}>
@@ -102,23 +98,19 @@ export default function Profile() {
             </div>
           </div>
 
-          <button type="button" onClick={getLocation} className="btn-ghost w-full text-sm py-2 inline-flex items-center justify-center gap-2">
-            <Icon name="location" size={16} />
+          <button type="button" onClick={getLocation} className="btn-ghost w-full text-sm py-2 inline-flex items-center justify-center">
             Update My Location
           </button>
 
           <div className="space-y-3 border-t border-[#d3e3d9] pt-4">
             <h3 className="text-slate-900 font-semibold">Preferences</h3>
             {[
-              { key: 'available_to_donate', label: 'Available to Donate Blood', icon: 'heart' },
-              { key: 'receive_emergency_alerts', label: 'Receive Emergency Alerts', icon: 'alert' },
-              { key: 'receive_blood_alerts', label: 'Receive Blood Request Alerts', icon: 'blood' },
+              { key: 'available_to_donate', label: 'Available to Donate Blood' },
+              { key: 'receive_emergency_alerts', label: 'Receive Emergency Alerts' },
+              { key: 'receive_blood_alerts', label: 'Receive Blood Request Alerts' },
             ].map((toggle) => (
               <label key={toggle.key} className="flex items-center justify-between p-3 rounded-xl bg-[#f7fcf9] border border-[#d5e5db] cursor-pointer hover:bg-[#eef8f3] transition-colors">
-                <span className="text-sm text-slate-700 inline-flex items-center gap-2">
-                  <Icon name={toggle.icon} size={14} className="text-slate-600" />
-                  {toggle.label}
-                </span>
+                <span className="text-sm text-slate-700">{toggle.label}</span>
                 <div className="relative">
                   <input
                     type="checkbox"
