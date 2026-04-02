@@ -4,7 +4,6 @@ import { Circle, MapContainer, Marker, TileLayer, useMapEvents } from 'react-lea
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { createEmergencyAlert, getEmergencyAlerts } from '../services/api';
-import Icon from '../components/ui/Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -213,19 +212,13 @@ export default function SendAlert() {
             </div>
 
             <div className="mt-5 rounded-2xl border border-[#d5e5db] bg-white px-4 py-3 text-xs text-slate-600">
-              <p className="inline-flex items-center gap-1.5">
-                <Icon name="clock" size={14} className="text-[#1f6b55]" />
-                Default expiry: about 3 hours from now ({expiryHint})
-              </p>
+              <p>Default expiry: about 3 hours from now ({expiryHint})</p>
             </div>
           </div>
 
           <div className="rounded-[24px] border border-[#d5e5db] bg-white p-4 sm:p-5">
             <form onSubmit={handleSubmit} className="space-y-4">
-              <h2 className="text-xl font-semibold text-slate-900 inline-flex items-center gap-2">
-                <Icon name="alert" size={20} className="text-[#1f6b55]" />
-                Alert Details
-              </h2>
+              <h2 className="text-xl font-semibold text-slate-900">Alert Details</h2>
 
               {error && <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
               {success && <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-700">{success}</div>}
@@ -297,8 +290,7 @@ export default function SendAlert() {
                 </div>
               </div>
 
-              <button type="submit" disabled={submitting} className="btn-danger w-full text-base py-3 inline-flex items-center justify-center gap-2">
-                <Icon name="tower" size={17} />
+              <button type="submit" disabled={submitting} className="btn-danger w-full text-base py-3 inline-flex items-center justify-center">
                 {submitting ? 'Sending Alert...' : 'Send Alert Now'}
               </button>
             </form>
@@ -308,10 +300,7 @@ export default function SendAlert() {
         <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="rounded-[24px] border border-[#d5e5db] bg-white p-4 sm:p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold text-slate-900 inline-flex items-center gap-2">
-                <Icon name="location" size={18} className="text-[#1f6b55]" />
-                Pin Incident Location
-              </h3>
+              <h3 className="text-lg font-semibold text-slate-900">Pin Incident Location</h3>
               <button type="button" onClick={useCurrentLocation} className="btn-ghost text-xs px-3 py-1.5">
                 Use My Current Location
               </button>
@@ -358,10 +347,7 @@ export default function SendAlert() {
                         {alert.severity}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-500 mt-2 inline-flex items-center gap-1">
-                      <Icon name="location" size={12} />
-                      {alert.radius_km}km radius
-                    </p>
+                    <p className="text-xs text-slate-500 mt-2">{alert.radius_km}km radius</p>
                   </div>
                 ))}
               </div>
