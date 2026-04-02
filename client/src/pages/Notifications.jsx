@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../services/api';
-import Icon from '../components/ui/Icon';
-
-const typeIcons = { emergency: 'alert', blood_request: 'blood', response: 'check', system: 'bell' };
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
@@ -39,10 +36,7 @@ export default function Notifications() {
     <div className="page-container max-w-3xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <h1 className="section-title mb-0 inline-flex items-center gap-2">
-            <Icon name="bell" size={22} className="text-primary-400" />
-            Notifications
-          </h1>
+          <h1 className="section-title mb-0">Notifications</h1>
           {unreadCount > 0 && <span className="badge bg-danger-500 text-white border-none">{unreadCount}</span>}
         </div>
         {unreadCount > 0 && (
@@ -64,9 +58,6 @@ export default function Notifications() {
             }`}
             style={{ animationDelay: `${i * 50}ms` }}
           >
-            <div className="w-9 h-9 rounded-lg bg-[#f7fcf9] border border-[#d3e3d9] text-slate-700 flex items-center justify-center mt-0.5">
-              <Icon name={typeIcons[notif.type] || 'bell'} size={18} />
-            </div>
             <div className="flex-1 min-w-0">
               <p className="text-slate-900 font-medium">{notif.title}</p>
               <p className="text-sm text-slate-600 mt-0.5">{notif.message}</p>
