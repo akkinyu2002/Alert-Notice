@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { register as registerApi } from '../services/api';
-import Icon from '../components/ui/Icon';
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 const DISTRICTS = ['Kathmandu', 'Lalitpur', 'Bhaktapur', 'Pokhara', 'Butwal', 'Biratnagar', 'Birgunj', 'Chitwan', 'Dharan', 'Nepalgunj'];
@@ -53,8 +52,8 @@ export default function Register() {
       <div className="absolute inset-0 bg-gradient-to-br from-[#def5ea] via-[#eef8f3] to-[#d3ecdf]"></div>
       <div className="relative glass-card p-8 w-full max-w-lg animate-fade-in">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white shadow-[0_10px_24px_rgba(20,101,79,0.25)]">
-            <Icon name="heart" size={24} />
+          <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white shadow-[0_10px_24px_rgba(20,101,79,0.25)] text-xs font-bold tracking-[0.12em]">
+            NP
           </div>
           <h1 className="text-2xl font-bold text-slate-900">Join Nepal Alert</h1>
           <p className="text-slate-600 text-sm mt-1">Register as a donor and stay informed</p>
@@ -108,8 +107,7 @@ export default function Register() {
             </div>
           </div>
 
-          <button type="button" onClick={getLocation} className="btn-ghost w-full text-sm py-2 inline-flex items-center justify-center gap-2">
-            <Icon name="location" size={16} />
+          <button type="button" onClick={getLocation} className="btn-ghost w-full text-sm py-2 inline-flex items-center justify-center">
             Use My Current Location
           </button>
 
