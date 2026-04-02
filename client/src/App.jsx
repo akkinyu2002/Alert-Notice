@@ -32,7 +32,7 @@ function AdminRoute({ children }) {
 
 function AppRoutes() {
   return (
-    <div className="min-h-screen bg-[#edf7ef]">
+    <div className="min-h-screen bg-transparent">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
