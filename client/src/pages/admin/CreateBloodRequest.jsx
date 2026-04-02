@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { createBloodRequest } from '../../services/api';
 import { MapContainer, TileLayer, Marker, Circle, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import Icon from '../../components/ui/Icon';
 
 const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 
@@ -58,8 +57,8 @@ export default function CreateBloodRequest() {
     return (
       <div className="page-container max-w-2xl">
         <div className="glass-card p-8 text-center animate-fade-in">
-          <div className="w-14 h-14 rounded-2xl bg-success-500/20 border border-success-500/30 text-success-400 flex items-center justify-center mx-auto mb-4">
-            <Icon name="check" size={28} />
+          <div className="w-14 h-14 rounded-2xl bg-success-500/20 border border-success-500/30 text-success-500 flex items-center justify-center mx-auto mb-4 text-xs font-bold tracking-[0.12em]">
+            OK
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">Blood Request Created!</h2>
           <p className="text-slate-600 mb-4">{result.matchedDonors} matching donors have been notified.</p>
@@ -78,10 +77,7 @@ export default function CreateBloodRequest() {
 
   return (
     <div className="page-container max-w-4xl">
-      <h1 className="section-title inline-flex items-center gap-2">
-        <Icon name="blood" size={24} className="text-danger-400" />
-        Create Blood Request
-      </h1>
+      <h1 className="section-title">Create Blood Request</h1>
       <div className="glass-card p-8 animate-fade-in">
         {error && <div className="bg-danger-500/10 border border-danger-500/20 rounded-xl p-3 mb-4 text-danger-400 text-sm">{error}</div>}
 
@@ -131,10 +127,7 @@ export default function CreateBloodRequest() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-3 block inline-flex items-center gap-2">
-              <Icon name="location" size={15} />
-              Hospital Location (click map)
-            </label>
+            <label className="text-sm font-medium text-slate-700 mb-3 block">Hospital Location (click map)</label>
             <div className="rounded-xl overflow-hidden" style={{ height: '300px' }}>
               <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OSM" />
@@ -144,8 +137,7 @@ export default function CreateBloodRequest() {
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="btn-primary w-full text-lg py-3 inline-flex items-center justify-center gap-2">
-            <Icon name="blood" size={18} />
+          <button type="submit" disabled={loading} className="btn-primary w-full text-lg py-3 inline-flex items-center justify-center">
             {loading ? 'Creating...' : 'Create Blood Request and Notify Donors'}
           </button>
         </form>
