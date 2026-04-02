@@ -4,7 +4,6 @@ import { getBloodRequestById, respondToBloodRequest } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import Icon from '../components/ui/Icon';
 
 export default function BloodRequestDetail() {
   const { id } = useParams();
@@ -65,10 +64,7 @@ export default function BloodRequestDetail() {
           </div>
           <div className="bg-[#f8faf6] rounded-xl p-4">
             <p className="text-sm text-slate-600">Contact</p>
-            <a href={`tel:${request.contact_number}`} className="text-xl font-bold text-primary-400 hover:text-primary-300 inline-flex items-center gap-2">
-              <Icon name="phone" size={18} />
-              {request.contact_number}
-            </a>
+            <a href={`tel:${request.contact_number}`} className="text-xl font-bold text-primary-500 hover:text-primary-600">{request.contact_number}</a>
           </div>
           <div className="bg-[#f8faf6] rounded-xl p-4">
             <p className="text-sm text-slate-600">Radius</p>
@@ -92,8 +88,7 @@ export default function BloodRequestDetail() {
 
         {responded ? (
           <div className={`rounded-xl p-6 text-center ${responseStatus === 'willing' ? 'bg-success-500/10 border border-success-500/20' : 'bg-gray-500/10 border border-gray-500/20'}`}>
-            <p className="text-lg font-semibold text-slate-900 inline-flex items-center gap-2">
-              <Icon name={responseStatus === 'willing' ? 'check' : 'note'} size={18} />
+            <p className="text-lg font-semibold text-slate-900">
               {responseStatus === 'willing'
                 ? 'Thank you. Your willingness to donate has been recorded.'
                 : 'Your response has been recorded.'}
@@ -105,23 +100,19 @@ export default function BloodRequestDetail() {
             <p className="text-sm text-slate-600 mb-3">
               Public users can view this request directly. To respond as a donor, sign in with an authorized account.
             </p>
-            <a href={`tel:${request.contact_number}`} className="btn-primary w-full text-lg py-4 text-center inline-flex items-center justify-center gap-2">
-              <Icon name="phone" size={18} />
+            <a href={`tel:${request.contact_number}`} className="btn-primary w-full text-lg py-4 text-center inline-flex items-center justify-center">
               Call Hospital
             </a>
           </div>
         ) : (
           <div className="flex flex-col sm:flex-row gap-3">
-            <button onClick={() => handleRespond('willing')} className="btn-success flex-1 text-lg py-4 inline-flex items-center justify-center gap-2">
-              <Icon name="heart" size={18} />
+            <button onClick={() => handleRespond('willing')} className="btn-success flex-1 text-lg py-4 inline-flex items-center justify-center">
               I Can Donate
             </button>
-            <button onClick={() => handleRespond('unavailable')} className="btn-ghost flex-1 text-lg py-4 inline-flex items-center justify-center gap-2">
-              <Icon name="xmark" size={18} />
+            <button onClick={() => handleRespond('unavailable')} className="btn-ghost flex-1 text-lg py-4 inline-flex items-center justify-center">
               Not Available
             </button>
-            <a href={`tel:${request.contact_number}`} className="btn-primary flex-1 text-lg py-4 text-center inline-flex items-center justify-center gap-2">
-              <Icon name="phone" size={18} />
+            <a href={`tel:${request.contact_number}`} className="btn-primary flex-1 text-lg py-4 text-center inline-flex items-center justify-center">
               Call Hospital
             </a>
           </div>
