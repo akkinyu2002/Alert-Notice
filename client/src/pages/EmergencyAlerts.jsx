@@ -3,7 +3,6 @@ import { getEmergencyAlerts } from '../services/api';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import Icon from '../components/ui/Icon';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -40,10 +39,7 @@ export default function EmergencyAlerts() {
   return (
     <div className="page-container">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="section-title mb-0 inline-flex items-center gap-2">
-          <Icon name="alert" size={24} className="text-danger-400" />
-          Emergency Alerts
-        </h1>
+        <h1 className="section-title mb-0">Emergency Alerts</h1>
         <div className="flex gap-2">
           <button onClick={() => setView('cards')} className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${view === 'cards' ? 'bg-[#dff2e8] text-[#124f3d]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#edf8f3]'}`}>
             Cards
@@ -62,9 +58,7 @@ export default function EmergencyAlerts() {
             <div key={alert.id} className="glass-card-hover p-5 animate-fade-in" style={{ animationDelay: `${i * 80}ms` }}>
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-lg bg-[#f7fcf9] border border-[#d3e4da] text-slate-700 flex items-center justify-center">
-                    <Icon name={typeIcons[alert.type] || 'megaphone'} size={18} />
-                  </span>
+                  <span className="text-xs uppercase tracking-wide text-slate-500">{typeIcons[alert.type] || 'other'}</span>
                   <span className={`badge ${alert.severity === 'critical' ? 'badge-critical' : alert.severity === 'high' ? 'badge-high' : alert.severity === 'medium' ? 'badge-medium' : 'badge-low'}`}>
                     {alert.severity}
                   </span>
@@ -74,14 +68,8 @@ export default function EmergencyAlerts() {
               <h3 className="text-slate-900 font-semibold text-lg mb-2">{alert.title}</h3>
               <p className="text-sm text-slate-600 mb-4">{alert.description}</p>
               <div className="flex items-center justify-between text-xs text-slate-500 border-t border-[#dfe9e2] pt-3">
-                <span className="inline-flex items-center gap-1">
-                  <Icon name="location" size={13} />
-                  {alert.radius_km}km radius
-                </span>
-                <span className="inline-flex items-center gap-1">
-                  <Icon name="clock" size={13} />
-                  Expires: {new Date(alert.expires_at).toLocaleDateString()}
-                </span>
+                <span>{alert.radius_km}km radius</span>
+                <span>Expires: {new Date(alert.expires_at).toLocaleDateString()}</span>
               </div>
               {alert.created_by_name && <p className="text-xs text-slate-500 mt-2">Created by: {alert.created_by_name}</p>}
             </div>
