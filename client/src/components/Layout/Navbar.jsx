@@ -39,10 +39,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
-
   const linkClass = (path, isAdminLink = false) => {
     const active = path === '/'
       ? location.pathname === '/'
@@ -64,7 +60,7 @@ export default function Navbar() {
       >
         <div className="px-3 sm:px-4">
           <div className="flex items-center justify-between min-h-[64px] gap-2">
-            <Link to="/" className="flex items-center gap-2.5 shrink-0">
+            <Link to="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5 shrink-0">
               <div className="w-9 h-9 rounded-xl bg-[#d7f2e5] text-[#155741] flex items-center justify-center border border-[#b7dfcd] text-[11px] font-bold tracking-wide">
                 NA
               </div>
@@ -183,11 +179,7 @@ export default function Navbar() {
                     </button>
                   </>
                 ) : (
-                  <Link
-                    to={adminEntryPath}
-                    onClick={() => setMobileOpen(false)}
-                    className="w-full inline-flex items-center justify-center rounded-xl bg-[#177f62] px-3 py-2 text-sm font-semibold text-white"
-                  >
+                  <Link to={adminEntryPath} onClick={() => setMobileOpen(false)} className="w-full inline-flex items-center justify-center rounded-xl bg-[#177f62] px-3 py-2 text-sm font-semibold text-white">
                     Admin Panel
                   </Link>
                 )}
