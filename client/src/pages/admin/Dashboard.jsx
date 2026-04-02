@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getUserStats, getAllEmergencyAlerts, getAllBloodRequests } from '../../services/api';
-import Icon from '../../components/ui/Icon';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -24,19 +23,14 @@ export default function AdminDashboard() {
     <div className="page-container">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 inline-flex items-center gap-2">
-            <Icon name="dashboard" size={26} className="text-primary-400" />
-            Admin Dashboard
-          </h1>
+          <h1 className="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
           <p className="text-slate-600 mt-1">System overview and management</p>
         </div>
         <div className="flex gap-3">
-          <Link to="/admin/create-alert" className="btn-danger inline-flex items-center gap-2">
-            <Icon name="alert" size={16} />
+          <Link to="/admin/create-alert" className="btn-danger inline-flex items-center">
             New Alert
           </Link>
-          <Link to="/admin/create-blood-request" className="btn-primary inline-flex items-center gap-2">
-            <Icon name="blood" size={16} />
+          <Link to="/admin/create-blood-request" className="btn-primary inline-flex items-center">
             New Blood Request
           </Link>
         </div>
@@ -45,15 +39,15 @@ export default function AdminDashboard() {
       {stats && (
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           {[
-            { label: 'Total Users', value: stats.totalUsers, icon: 'users', color: 'from-[#2f9f87] to-[#1f7f68]' },
-            { label: 'Available Donors', value: stats.availableDonors, icon: 'heart', color: 'from-[#2faf72] to-[#228f5d]' },
-            { label: 'Active Alerts', value: stats.activeAlerts, icon: 'alert', color: 'from-[#f14545] to-[#d93737]' },
-            { label: 'Blood Requests', value: stats.activeBloodRequests, icon: 'blood', color: 'from-[#df6868] to-[#bf4b4b]' },
-            { label: 'Donor Responses', value: stats.totalResponses, icon: 'check', color: 'from-[#43a08a] to-[#2f7c67]' },
+            { label: 'Total Users', value: stats.totalUsers, color: 'from-[#2f9f87] to-[#1f7f68]' },
+            { label: 'Available Donors', value: stats.availableDonors, color: 'from-[#2faf72] to-[#228f5d]' },
+            { label: 'Active Alerts', value: stats.activeAlerts, color: 'from-[#f14545] to-[#d93737]' },
+            { label: 'Blood Requests', value: stats.activeBloodRequests, color: 'from-[#df6868] to-[#bf4b4b]' },
+            { label: 'Donor Responses', value: stats.totalResponses, color: 'from-[#43a08a] to-[#2f7c67]' },
           ].map((s, i) => (
             <div key={i} className="glass-card p-5 animate-fade-in" style={{ animationDelay: `${i * 80}ms` }}>
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center mb-3 text-white`}>
-                <Icon name={s.icon} size={18} />
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center mb-3 text-white text-xs font-bold`}>
+                {s.label.charAt(0)}
               </div>
               <p className="text-3xl font-bold text-slate-900">{s.value}</p>
               <p className="text-sm text-slate-600">{s.label}</p>
@@ -84,10 +78,7 @@ export default function AdminDashboard() {
         <div className="glass-card p-6 animate-fade-in">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-900 font-semibold">Recent Emergency Alerts</h3>
-            <Link to="/admin/create-alert" className="text-xs link-accent inline-flex items-center gap-1">
-              <Icon name="plus" size={12} />
-              Create
-            </Link>
+            <Link to="/admin/create-alert" className="text-xs link-accent inline-flex items-center">Create</Link>
           </div>
           <div className="space-y-3">
             {alerts.map((a) => (
@@ -108,10 +99,7 @@ export default function AdminDashboard() {
         <div className="glass-card p-6 animate-fade-in" style={{ animationDelay: '100ms' }}>
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-slate-900 font-semibold">Recent Blood Requests</h3>
-            <Link to="/admin/create-blood-request" className="text-xs link-accent inline-flex items-center gap-1">
-              <Icon name="plus" size={12} />
-              Create
-            </Link>
+            <Link to="/admin/create-blood-request" className="text-xs link-accent inline-flex items-center">Create</Link>
           </div>
           <div className="space-y-3">
             {bloodReqs.map((r) => (
