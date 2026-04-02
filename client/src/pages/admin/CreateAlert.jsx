@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { createEmergencyAlert } from '../../services/api';
 import { MapContainer, TileLayer, Marker, Circle, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import Icon from '../../components/ui/Icon';
 
 function LocationPicker({ position, setPosition }) {
   useMapEvents({
@@ -70,10 +69,7 @@ export default function CreateAlert() {
 
   return (
     <div className="page-container max-w-4xl">
-      <h1 className="section-title inline-flex items-center gap-2">
-        <Icon name="alert" size={24} className="text-danger-400" />
-        Create Emergency Alert
-      </h1>
+      <h1 className="section-title">Create Emergency Alert</h1>
 
       <div className="glass-card p-8 animate-fade-in">
         {error && <div className="bg-danger-500/10 border border-danger-500/20 rounded-xl p-3 mb-4 text-danger-400 text-sm">{error}</div>}
@@ -147,10 +143,7 @@ export default function CreateAlert() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-slate-700 mb-3 block inline-flex items-center gap-2">
-              <Icon name="location" size={15} />
-              Click on map to set location
-            </label>
+            <label className="text-sm font-medium text-slate-700 mb-3 block">Click on map to set location</label>
             <div className="rounded-xl overflow-hidden" style={{ height: '300px' }}>
               <MapContainer center={position} zoom={12} style={{ height: '100%', width: '100%' }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OSM" />
@@ -163,8 +156,7 @@ export default function CreateAlert() {
             </p>
           </div>
 
-          <button type="submit" disabled={loading} className="btn-danger w-full text-lg py-3 inline-flex items-center justify-center gap-2">
-            <Icon name="alert" size={18} />
+          <button type="submit" disabled={loading} className="btn-danger w-full text-lg py-3 inline-flex items-center justify-center">
             {loading ? 'Creating...' : 'Create Emergency Alert'}
           </button>
         </form>
