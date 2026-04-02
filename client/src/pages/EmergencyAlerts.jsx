@@ -45,10 +45,10 @@ export default function EmergencyAlerts() {
           Emergency Alerts
         </h1>
         <div className="flex gap-2">
-          <button onClick={() => setView('cards')} className={`px-3 py-1.5 rounded-lg text-sm ${view === 'cards' ? 'bg-[#eff4e9] text-slate-900' : 'text-slate-600 hover:text-slate-900'}`}>
+          <button onClick={() => setView('cards')} className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${view === 'cards' ? 'bg-[#dff2e8] text-[#124f3d]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#edf8f3]'}`}>
             Cards
           </button>
-          <button onClick={() => setView('map')} className={`px-3 py-1.5 rounded-lg text-sm ${view === 'map' ? 'bg-[#eff4e9] text-slate-900' : 'text-slate-600 hover:text-slate-900'}`}>
+          <button onClick={() => setView('map')} className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${view === 'map' ? 'bg-[#dff2e8] text-[#124f3d]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#edf8f3]'}`}>
             Map
           </button>
         </div>
@@ -62,18 +62,18 @@ export default function EmergencyAlerts() {
             <div key={alert.id} className="glass-card-hover p-5 animate-fade-in" style={{ animationDelay: `${i * 80}ms` }}>
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-lg bg-[#f8faf6] border border-[#d7dfd2] text-slate-700 flex items-center justify-center">
+                  <span className="w-8 h-8 rounded-lg bg-[#f7fcf9] border border-[#d3e4da] text-slate-700 flex items-center justify-center">
                     <Icon name={typeIcons[alert.type] || 'megaphone'} size={18} />
                   </span>
                   <span className={`badge ${alert.severity === 'critical' ? 'badge-critical' : alert.severity === 'high' ? 'badge-high' : alert.severity === 'medium' ? 'badge-medium' : 'badge-low'}`}>
                     {alert.severity}
                   </span>
                 </div>
-                <span className="badge bg-[#f8faf6] text-slate-600 border border-[#d7dfd2]">{alert.type.replace('_', ' ')}</span>
+                <span className="badge bg-[#f7fcf9] text-slate-600 border border-[#d3e4da]">{alert.type.replace('_', ' ')}</span>
               </div>
               <h3 className="text-slate-900 font-semibold text-lg mb-2">{alert.title}</h3>
               <p className="text-sm text-slate-600 mb-4">{alert.description}</p>
-              <div className="flex items-center justify-between text-xs text-slate-500 border-t border-[#e4ebdf] pt-3">
+              <div className="flex items-center justify-between text-xs text-slate-500 border-t border-[#dfe9e2] pt-3">
                 <span className="inline-flex items-center gap-1">
                   <Icon name="location" size={13} />
                   {alert.radius_km}km radius
