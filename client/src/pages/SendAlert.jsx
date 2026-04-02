@@ -183,10 +183,10 @@ export default function SendAlert() {
 
   return (
     <div className="page-container">
-      <section className="rounded-[30px] border border-[#d6ddd1] bg-white p-4 sm:p-6 lg:p-7 shadow-[0_18px_50px_rgba(37,55,29,0.08)]">
+      <section className="surface-elevated p-4 sm:p-6 lg:p-7">
         <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[24px] border border-[#dde4d7] bg-[#f7faf4] p-5 sm:p-6 lg:p-7">
-            <span className="inline-flex items-center gap-2 rounded-full bg-[#daf5e8] px-3 py-1 text-xs font-semibold text-[#1e6149]">
+          <div className="surface-subtle p-5 sm:p-6 lg:p-7">
+            <span className="tag-soft gap-2">
               <span className="h-2 w-2 rounded-full bg-[#1f946b]"></span>
               No Login Required
             </span>
@@ -204,7 +204,7 @@ export default function SendAlert() {
                   key={preset.title}
                   type="button"
                   onClick={() => applyPreset(preset)}
-                  className="w-full text-left rounded-2xl border border-[#dce4d6] bg-white px-4 py-3 hover:bg-[#f2f7ec] transition-colors"
+                  className="w-full text-left rounded-2xl border border-[#d5e5db] bg-white px-4 py-3 hover:bg-[#eff7f2] transition-colors"
                 >
                   <p className="text-sm font-semibold text-slate-900">{preset.title}</p>
                   <p className="text-xs text-slate-600 mt-0.5">{preset.description}</p>
@@ -212,7 +212,7 @@ export default function SendAlert() {
               ))}
             </div>
 
-            <div className="mt-5 rounded-2xl border border-[#dde4d7] bg-white px-4 py-3 text-xs text-slate-600">
+            <div className="mt-5 rounded-2xl border border-[#d5e5db] bg-white px-4 py-3 text-xs text-slate-600">
               <p className="inline-flex items-center gap-1.5">
                 <Icon name="clock" size={14} className="text-[#1f6b55]" />
                 Default expiry: about 3 hours from now ({expiryHint})
@@ -220,7 +220,7 @@ export default function SendAlert() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#dde4d7] bg-white p-4 sm:p-5">
+          <div className="rounded-[24px] border border-[#d5e5db] bg-white p-4 sm:p-5">
             <form onSubmit={handleSubmit} className="space-y-4">
               <h2 className="text-xl font-semibold text-slate-900 inline-flex items-center gap-2">
                 <Icon name="alert" size={20} className="text-[#1f6b55]" />
@@ -306,7 +306,7 @@ export default function SendAlert() {
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-[24px] border border-[#dde4d7] bg-white p-4 sm:p-5">
+          <div className="rounded-[24px] border border-[#d5e5db] bg-white p-4 sm:p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-lg font-semibold text-slate-900 inline-flex items-center gap-2">
                 <Icon name="location" size={18} className="text-[#1f6b55]" />
@@ -316,7 +316,7 @@ export default function SendAlert() {
                 Use My Current Location
               </button>
             </div>
-            <div className="rounded-2xl overflow-hidden border border-[#dce4d6]" style={{ height: '280px' }}>
+            <div className="rounded-2xl overflow-hidden border border-[#d5e5db]" style={{ height: '280px' }}>
               <MapContainer center={position} zoom={12} style={{ height: '100%', width: '100%' }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution="&copy; OSM contributors" />
                 <LocationPicker
@@ -333,10 +333,10 @@ export default function SendAlert() {
             </p>
           </div>
 
-          <div className="rounded-[24px] border border-[#dde4d7] bg-[#f8faf6] p-4 sm:p-5">
+          <div className="rounded-[24px] border border-[#d5e5db] bg-[#f7fcf9] p-4 sm:p-5">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-lg font-semibold text-slate-900">Recent Alerts</h3>
-              <Link to="/emergency-alerts" className="text-sm font-semibold text-[#1f7a61] hover:text-[#165a48]">
+              <Link to="/emergency-alerts" className="text-sm font-semibold link-accent">
                 View all
               </Link>
             </div>
@@ -348,7 +348,7 @@ export default function SendAlert() {
             ) : (
               <div className="space-y-2.5">
                 {recentAlerts.map((alert) => (
-                  <div key={alert.id} className="rounded-2xl border border-[#dce4d6] bg-white px-3 py-3">
+                  <div key={alert.id} className="rounded-2xl border border-[#d5e5db] bg-white px-3 py-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="text-sm font-semibold text-slate-900">{alert.title}</p>
