@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { getAllUsers } from '../../services/api';
-import Icon from '../../components/ui/Icon';
 
 export default function ManageUsers() {
   const [users, setUsers] = useState([]);
@@ -28,10 +27,7 @@ export default function ManageUsers() {
 
   return (
     <div className="page-container">
-      <h1 className="section-title inline-flex items-center gap-2">
-        <Icon name="users" size={24} className="text-primary-400" />
-        Manage Users
-      </h1>
+      <h1 className="section-title">Manage Users</h1>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <input className="input-field flex-1" placeholder="Search by name, email, or district..." value={search} onChange={(e) => setSearch(e.target.value)} />
