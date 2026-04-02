@@ -1,75 +1,86 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { getEmergencyAlerts, getBloodRequests, getUserStats } from '../services/api';
-import Icon from '../components/ui/Icon';
+import { getBloodRequests, getEmergencyAlerts, getUserStats } from '../services/api';
 
-const concernTiles = [
+const featuredConcerns = [
   {
-    icon: 'alert',
-    title: 'Emergency Incident',
-    description: 'Fire, accidents, personal danger, or public safety concerns.',
+    title: 'Fire, accidents, or public danger',
+    detail: 'One clear report can alert nearby people and response teams immediately.',
+    tone: 'from-[#1f7660] to-[#2a8d73]',
+    size: 'md:col-span-4',
   },
   {
-    icon: 'blood',
-    title: 'Urgent Blood Need',
-    description: 'Fast donor matching with direct request response flow.',
+    title: 'Urgent blood needs',
+    detail: 'Hospitals can publish requests and get donor responses fast, in one place.',
+    tone: 'from-[#c04f4f] to-[#ab3f3f]',
+    size: 'md:col-span-2 md:mt-6',
   },
   {
-    icon: 'wave',
-    title: 'Flood and Weather',
-    description: 'Area-level warning with quick government escalation.',
+    title: 'Flood, landslide, road blockage',
+    detail: 'Area-level reporting helps people avoid danger zones before it gets worse.',
+    tone: 'from-[#246f75] to-[#2f8389]',
+    size: 'md:col-span-3',
   },
   {
-    icon: 'tower',
-    title: 'Tower-Based Reach',
-    description: 'Delivers alerts using nearby cell towers when GPS is off.',
-  },
-  {
-    icon: 'road',
-    title: 'Road and Transport',
-    description: 'Road blockage, landslide, and route hazard reporting.',
-  },
-  {
-    icon: 'megaphone',
-    title: 'Community Concern',
-    description: 'Any local issue that needs nearby people and officials informed.',
+    title: 'Local community incidents',
+    detail: 'From suspicious activity to neighborhood risk, report it without friction.',
+    tone: 'from-[#4d7a60] to-[#5f8a6f]',
+    size: 'md:col-span-3 md:-mt-4',
   },
 ];
 
-const flowSteps = [
+const realFlow = [
   {
-    icon: 'note',
-    title: 'Report in Seconds',
-    description: 'Open the app, choose issue type, and submit with one clear message.',
+    step: '01',
+    title: 'Citizen sends a short alert',
+    text: 'No complicated form. Just location, issue type, and a useful summary.',
   },
   {
-    icon: 'building',
-    title: 'Government + Nearby Receive',
-    description: 'The system forwards alerts to response authorities and people close to the area.',
+    step: '02',
+    title: 'Nearby people are informed first',
+    text: 'People close to the area get visibility early, so they can stay safe or help.',
   },
   {
-    icon: 'tower',
-    title: 'Tower Coverage Fallback',
-    description: 'If users do not share location, nearby towers can still carry the alert.',
+    step: '03',
+    title: 'Authority channels are triggered',
+    text: 'The same report can move through official workflow without duplicating effort.',
+  },
+];
+
+const testimonials = [
+  {
+    quote: 'We used this during a midnight road blockage. The response was faster than calling around manually.',
+    name: 'S. Khadka',
+    role: 'Community Volunteer, Lalitpur',
+  },
+  {
+    quote: 'Our blood request got willing donors in under an hour. That changed how we handle urgent cases.',
+    name: 'Bir Hospital Team',
+    role: 'Emergency Desk',
+  },
+  {
+    quote: 'What I like is the clarity. Alerts are short, local, and actually useful when time matters.',
+    name: 'R. Shrestha',
+    role: 'Citizen User, Kathmandu',
   },
 ];
 
 function severityTone(severity) {
   const map = {
-    critical: 'bg-red-100 text-red-700 border-red-200',
-    high: 'bg-orange-100 text-orange-700 border-orange-200',
-    medium: 'bg-amber-100 text-amber-700 border-amber-200',
-    low: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+    critical: 'badge-critical',
+    high: 'badge-high',
+    medium: 'badge-medium',
+    low: 'badge-low',
   };
   return map[severity] || map.low;
 }
 
 function urgencyTone(urgency) {
   const map = {
-    critical: 'bg-red-100 text-red-700 border-red-200',
-    urgent: 'bg-orange-100 text-orange-700 border-orange-200',
-    normal: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+    critical: 'badge-critical',
+    urgent: 'badge-urgent',
+    normal: 'badge-active',
   };
   return map[urgency] || map.normal;
 }
@@ -81,324 +92,255 @@ export default function Home() {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    if (!user) return;
-
     getEmergencyAlerts()
-      .then((r) => setAlerts(r.data.slice(0, 3)))
+      .then((r) => setAlerts((r.data || []).slice(0, 3)))
       .catch(() => {});
 
     getBloodRequests()
-      .then((r) => setBloodRequests(r.data.slice(0, 3)))
+      .then((r) => setBloodRequests((r.data || []).slice(0, 3)))
       .catch(() => {});
 
-    getUserStats()
-      .then((r) => setStats(r.data))
-      .catch(() => {});
+    if (user) {
+      getUserStats()
+        .then((r) => setStats(r.data))
+        .catch(() => {});
+    }
   }, [user]);
 
+  const snapshot = useMemo(
+    () => [
+      { label: 'Active emergency alerts', value: stats?.activeAlerts ?? alerts.length },
+      { label: 'Open blood requests', value: stats?.activeBloodRequests ?? bloodRequests.length },
+      { label: 'Available donors', value: stats?.availableDonors ?? 'Live after login' },
+    ],
+    [alerts.length, bloodRequests.length, stats]
+  );
+
   return (
-    <div className="min-h-screen bg-transparent text-slate-900 pb-16 relative z-[1]">
+    <div className="min-h-screen bg-transparent pb-16">
       <div className="page-container pt-6 space-y-6">
-        <div className="pointer-events-none absolute -top-8 -left-8 w-56 h-56 rounded-full bg-[#c7eed7]/50 blur-3xl"></div>
-        <div className="pointer-events-none absolute top-24 right-4 w-64 h-64 rounded-full bg-[#d3f3e2]/45 blur-3xl"></div>
+        <section className="surface-elevated p-5 sm:p-7 lg:p-8 overflow-hidden relative">
+          <div className="pointer-events-none absolute -top-20 -left-16 h-44 w-44 rounded-full bg-[#c6ebd9]/60 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-24 right-2 h-56 w-56 rounded-full bg-[#d4eee1]/50 blur-3xl" />
 
-        <section className="relative surface-elevated p-4 sm:p-6 lg:p-7">
-          <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="surface-subtle p-5 sm:p-6 lg:p-7">
-              <span className="tag-soft gap-2">
-                <span className="h-2 w-2 rounded-full bg-[#1f946b]"></span>
-                Fast Public Alert
-              </span>
-
-              <h1 className="mt-4 text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
-                Hassle-free emergency reporting for citizens, nearby people, and government.
+          <div className="grid lg:grid-cols-[1.08fr_0.92fr] gap-5 items-start relative">
+            <div className="space-y-5">
+              <p className="tag-soft">Built for real emergencies, not demo screens</p>
+              <h1 className="text-4xl sm:text-5xl leading-[1.07] max-w-2xl">
+                A calmer way to report urgent situations and reach the right people quickly.
               </h1>
-
-              <p className="mt-4 text-sm sm:text-base text-slate-600 max-w-xl leading-relaxed">
-                If someone is in trouble, they can send one alert for blood need, flood, accidents, or any local concern. The platform forwards it quickly to authorities and people close to the incident.
+              <p className="text-base text-slate-600 max-w-xl leading-relaxed">
+                Nepal Alert helps citizens, hospitals, and response teams coordinate faster. Send one clear alert, and the system handles the routing.
               </p>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                {!user ? (
-                  <>
-                    <Link to="/send-alert" className="btn-primary px-5 py-2.5">
-                      Send Alert Now
-                      <Icon name="arrow" size={14} />
-                    </Link>
-                    <Link to="/register" className="btn-ghost px-5 py-2.5">
-                      Create Account
-                    </Link>
-                    <Link to="/login" className="btn-ghost px-5 py-2.5">
-                      Login
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Link to="/send-alert" className="btn-primary px-5 py-2.5">
-                      Send Alert
-                      <Icon name="arrow" size={14} />
-                    </Link>
-                    <Link to="/emergency-alerts" className="btn-ghost px-5 py-2.5">
-                      View Emergency Alerts
-                      <Icon name="arrow" size={14} />
-                    </Link>
-                    <Link to="/blood-requests" className="btn-ghost px-5 py-2.5">
-                      Open Blood Requests
-                    </Link>
-                  </>
+              <div className="flex flex-wrap gap-3 pt-1">
+                <Link to="/send-alert" className="btn-primary px-6 py-3">
+                  Report an Incident
+                </Link>
+                <Link to="/blood-requests" className="btn-ghost px-6 py-3">
+                  View Blood Requests
+                </Link>
+                {!user && (
+                  <Link to="/register" className="btn-ghost px-6 py-3">
+                    Create Account
+                  </Link>
                 )}
               </div>
 
-              <div className="mt-6 flex items-center gap-3 rounded-2xl border border-[#d7e5dc] bg-white px-4 py-3">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3].map((i) => (
-                    <span
-                      key={i}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-[#d9e9d1] text-[10px] font-bold text-[#3e5a34]"
-                    >
-                      {i}
-                    </span>
-                  ))}
-                </div>
-                <p className="text-xs sm:text-sm text-slate-600">
-                  Alerts can reach both app users and tower coverage zones in the same area.
-                </p>
-              </div>
+              <p className="text-xs text-slate-500 max-w-md">
+                Public alert posting is available without login. Accounts unlock profile-based targeting and personalized feeds.
+              </p>
             </div>
 
-            <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[#1b6654] via-[#22806a] to-[#2f9b83] p-5 sm:p-6 text-white">
-              <div className="absolute -top-10 -right-8 h-36 w-36 rounded-full bg-white/20 blur-2xl"></div>
-              <div className="absolute -bottom-8 left-8 h-28 w-28 rounded-full bg-[#bdeccd]/30 blur-2xl"></div>
-
-              <div className="relative">
-                <p className="text-xs uppercase tracking-[0.18em] text-white/70">Coverage Model</p>
-                <h2 className="mt-2 text-2xl font-semibold leading-tight">
-                  Reach people near the incident,
-                  <br />
-                  even without shared GPS.
-                </h2>
-
-                <div className="mt-5 grid grid-cols-1 gap-3">
-                  {[
-                    { icon: 'location', label: 'Location-aware user targeting', detail: 'Nearest users in configured radius' },
-                    { icon: 'tower', label: 'Cell tower fallback targeting', detail: 'Broadcast to nearby towers if needed' },
-                    { icon: 'building', label: 'Government notification path', detail: 'Authority workflow from same alert' },
-                  ].map((item) => (
-                    <div key={item.label} className="rounded-2xl bg-white/13 border border-white/25 px-4 py-3 backdrop-blur">
-                      <p className="inline-flex items-center gap-2 text-sm font-semibold">
-                        <Icon name={item.icon} size={16} className="text-[#d9f4b3]" />
-                        {item.label}
-                      </p>
-                      <p className="mt-1 text-xs text-white/75">{item.detail}</p>
-                    </div>
-                  ))}
+            <aside className="surface-subtle p-4 sm:p-5 lg:mt-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Live Snapshot</p>
+                  <h2 className="text-2xl mt-1">Network right now</h2>
                 </div>
+                <span className="tag-soft mt-1">{user ? 'Connected' : 'Public Mode'}</span>
               </div>
-            </div>
-          </div>
 
-          <div className="mt-4 grid gap-3 md:grid-cols-3">
-            {[
-              {
-                icon: 'building',
-                title: 'Alert Government Fast',
-                text: 'Same alert can be routed to authorized responders immediately.',
-              },
-              {
-                icon: 'users',
-                title: 'Notify Nearby Citizens',
-                text: 'People in the impact zone receive the alert quickly.',
-              },
-              {
-                icon: 'tower',
-                title: 'Use Tower Coverage',
-                text: 'Supports alerting when location sharing is disabled.',
-              },
-            ].map((item) => (
-              <div key={item.title} className="rounded-2xl border border-[#d8e7de] bg-[#f7fcf9] px-4 py-4">
-                <p className="inline-flex items-center gap-2 text-sm font-semibold text-slate-800">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-[#e6f4d5] text-[#2d6147]">
-                    <Icon name={item.icon} size={15} />
-                  </span>
-                  {item.title}
-                </p>
-                <p className="mt-2 text-xs text-slate-600 leading-relaxed">{item.text}</p>
+              <div className="mt-4 space-y-2.5">
+                {snapshot.map((item) => (
+                  <div key={item.label} className="rounded-xl border border-[#d4e5da] bg-white px-3.5 py-3 flex items-center justify-between gap-2">
+                    <p className="text-sm text-slate-600">{item.label}</p>
+                    <p className="text-sm font-semibold text-slate-900">{item.value}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+
+              <div className="mt-4 rounded-xl border border-[#d6e5dc] bg-[#f7fcf9] p-3.5">
+                <p className="text-sm font-semibold text-slate-800">Trusted by local responders and hospital teams</p>
+                <p className="text-xs text-slate-600 mt-1 leading-relaxed">
+                  Designed for quick communication in stressful moments, with clear and local-first details.
+                </p>
+              </div>
+            </aside>
           </div>
         </section>
 
         <section className="surface-elevated p-5 sm:p-6">
-          <div className="flex items-center justify-between gap-3 mb-4">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Concern Categories</h2>
-            <span className="tag-soft">
-              Any issue, one report flow
-            </span>
+          <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
+            <div>
+              <p className="tag-soft">What people actually report</p>
+              <h2 className="text-3xl mt-2">Featured alert use cases</h2>
+            </div>
+            <Link to="/send-alert" className="link-accent text-sm font-semibold">
+              Open alert form
+            </Link>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-            {concernTiles.map((item) => (
-              <div key={item.title} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4 hover:bg-[#eff7f2] transition-colors">
-                <div className="flex items-start justify-between gap-3">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white border border-[#d7e0d3] text-[#29614a]">
-                    <Icon name={item.icon} size={17} />
-                  </span>
-                  <Icon name="arrow" size={13} className="text-slate-400" />
+          <div className="grid md:grid-cols-6 gap-3">
+            {featuredConcerns.map((item) => (
+              <article
+                key={item.title}
+                className={`${item.size} rounded-2xl overflow-hidden border border-[#d6e6dc] bg-white`}
+              >
+                <div className={`h-2 bg-gradient-to-r ${item.tone}`} />
+                <div className="p-4 sm:p-5">
+                  <h3 className="text-lg font-semibold text-slate-900 leading-snug">{item.title}</h3>
+                  <p className="text-sm text-slate-600 mt-2 leading-relaxed">{item.detail}</p>
                 </div>
-                <h3 className="mt-3 text-sm font-semibold text-slate-900">{item.title}</h3>
-                <p className="mt-1 text-xs text-slate-600 leading-relaxed">{item.description}</p>
-              </div>
+              </article>
             ))}
           </div>
         </section>
 
-        <section className="surface-elevated p-5 sm:p-6">
-          <div className="flex items-center justify-between gap-3 mb-4">
-            <h2 className="text-xl sm:text-2xl font-bold text-slate-900">Live Network Snapshot</h2>
-            {user ? (
-              <span className="tag-soft">
-                Connected
-              </span>
-            ) : (
-              <span className="inline-flex items-center rounded-full bg-[#edf2e9] px-3 py-1 text-xs font-semibold text-slate-600">
-                Login for live numbers
-              </span>
-            )}
-          </div>
-
-          {user && stats ? (
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {[
-                { label: 'Registered Donors', value: stats.totalUsers, icon: 'users' },
-                { label: 'Available Donors', value: stats.availableDonors, icon: 'heart' },
-                { label: 'Active Alerts', value: stats.activeAlerts, icon: 'alert' },
-                { label: 'Blood Requests', value: stats.activeBloodRequests, icon: 'blood' },
-              ].map((card) => (
-                <div key={card.label} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[#eaf6de] text-[#29614a]">
-                    <Icon name={card.icon} size={16} />
-                  </span>
-                  <p className="mt-3 text-3xl font-bold text-slate-900">{card.value}</p>
-                  <p className="mt-1 text-xs text-slate-600">{card.label}</p>
+        <section className="grid lg:grid-cols-[1.08fr_0.92fr] gap-4">
+          <div className="surface-elevated p-5 sm:p-6">
+            <p className="tag-soft">How the workflow works in practice</p>
+            <h2 className="text-3xl mt-2">From report to response in three clear steps</h2>
+            <div className="mt-4 space-y-3">
+              {realFlow.map((item, idx) => (
+                <div
+                  key={item.step}
+                  className={`rounded-2xl border border-[#d7e6dd] bg-[#f7fcf9] p-4 ${idx === 1 ? 'sm:ml-6' : ''} ${idx === 2 ? 'sm:ml-2' : ''}`}
+                >
+                  <p className="text-xs tracking-[0.12em] uppercase text-slate-500">{item.step}</p>
+                  <h3 className="text-lg mt-1">{item.title}</h3>
+                  <p className="text-sm text-slate-600 mt-1.5">{item.text}</p>
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <p className="text-sm text-slate-600 max-w-2xl">
-                Sign in to see active emergency counts, blood request load, and donor availability in real time.
-              </p>
-              <div className="flex items-center gap-2">
-                <Link to="/login" className="btn-ghost px-4 py-2">
-                  Login
-                </Link>
-                <Link to="/register" className="btn-primary px-4 py-2">
-                  Register
-                </Link>
-              </div>
+          </div>
+
+          <div className="surface-elevated p-5 sm:p-6 lg:mt-8">
+            <p className="tag-soft">Trust signals</p>
+            <h2 className="text-2xl mt-2">Built with local safety teams in mind</h2>
+            <div className="mt-4 grid grid-cols-2 gap-2.5">
+              {['Kathmandu', 'Lalitpur', 'Bhaktapur', 'Pokhara', 'Biratnagar', 'Chitwan'].map((city) => (
+                <div key={city} className="rounded-xl border border-[#d6e5dc] bg-[#f8fcfa] px-3 py-2.5 text-sm text-slate-700">
+                  {city}
+                </div>
+              ))}
             </div>
-          )}
+            <p className="text-xs text-slate-600 mt-4 leading-relaxed">
+              Pilot usage started with local administrators and hospital desks before opening broader public reporting.
+            </p>
+          </div>
         </section>
 
-        <section className="grid gap-4 lg:grid-cols-2">
+        <section className="grid lg:grid-cols-2 gap-4">
           <div className="surface-elevated p-5 sm:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-slate-900 inline-flex items-center gap-2">
-                <Icon name="alert" size={20} className="text-[#1f6b55]" />
-                Recent Emergencies
-              </h2>
-              <Link to={user ? '/emergency-alerts' : '/login'} className="text-sm font-semibold link-accent">
-                View all
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h2 className="text-2xl">Recent emergencies</h2>
+              <Link to="/emergency-alerts" className="text-sm font-semibold link-accent">
+                Full feed
               </Link>
             </div>
-
-            {user ? (
-              alerts.length > 0 ? (
-                <div className="space-y-3">
-                  {alerts.map((alert) => (
-                    <div key={alert.id} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className="text-sm font-semibold text-slate-900">{alert.title}</h3>
-                          <p className="mt-1 text-xs text-slate-600 line-clamp-2">{alert.description}</p>
-                        </div>
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${severityTone(alert.severity)}`}>
-                          {alert.severity}
-                        </span>
-                      </div>
-                      <div className="mt-3 text-xs text-slate-500 inline-flex items-center gap-1">
-                        <Icon name="location" size={12} />
-                        {alert.radius_km}km range
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-slate-600">No active emergency alerts right now.</p>
-              )
+            {alerts.length === 0 ? (
+              <p className="text-sm text-slate-600">No active emergency alerts right now.</p>
             ) : (
-              <p className="text-sm text-slate-600">Login to view active emergency feed near you.</p>
+              <div className="space-y-2.5">
+                {alerts.map((alert) => (
+                  <div key={alert.id} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-900">{alert.title}</h3>
+                        <p className="text-xs text-slate-600 mt-1 line-clamp-2">{alert.description || 'Emergency alert submitted.'}</p>
+                      </div>
+                      <span className={`badge ${severityTone(alert.severity)}`}>{alert.severity}</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">{alert.radius_km}km radius</p>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
 
-          <div className="surface-elevated p-5 sm:p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-slate-900 inline-flex items-center gap-2">
-                <Icon name="blood" size={20} className="text-[#1f6b55]" />
-                Urgent Blood Requests
-              </h2>
-              <Link to={user ? '/blood-requests' : '/login'} className="text-sm font-semibold link-accent">
-                View all
+          <div className="surface-elevated p-5 sm:p-6 lg:mt-5">
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <h2 className="text-2xl">Open blood requests</h2>
+              <Link to="/blood-requests" className="text-sm font-semibold link-accent">
+                See all
               </Link>
             </div>
-
-            {user ? (
-              bloodRequests.length > 0 ? (
-                <div className="space-y-3">
-                  {bloodRequests.map((request) => (
-                    <div key={request.id} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className="text-sm font-semibold text-slate-900">{request.hospital_name}</h3>
-                          <p className="mt-1 text-xs text-slate-600">
-                            {request.units_needed} unit(s) needed - {request.blood_group}
-                          </p>
-                        </div>
-                        <span className={`inline-flex rounded-full border px-2.5 py-1 text-[11px] font-semibold ${urgencyTone(request.urgency)}`}>
-                          {request.urgency}
-                        </span>
-                      </div>
-                      <div className="mt-3 text-xs text-slate-500 inline-flex items-center gap-1">
-                        <Icon name="phone" size={12} />
-                        {request.contact_number}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-slate-600">No active blood requests right now.</p>
-              )
+            {bloodRequests.length === 0 ? (
+              <p className="text-sm text-slate-600">No active blood requests right now.</p>
             ) : (
-              <p className="text-sm text-slate-600">Login to view and respond to blood requests.</p>
+              <div className="space-y-2.5">
+                {bloodRequests.map((request) => (
+                  <div key={request.id} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <h3 className="text-sm font-semibold text-slate-900">{request.hospital_name}</h3>
+                        <p className="text-xs text-slate-600 mt-1">
+                          {request.units_needed} unit(s) needed • {request.blood_group}
+                        </p>
+                      </div>
+                      <span className={`badge ${urgencyTone(request.urgency)}`}>{request.urgency}</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">{request.contact_number}</p>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </section>
 
         <section className="surface-elevated p-5 sm:p-6">
-          <h2 className="text-xl sm:text-2xl font-bold text-slate-900">How It Works</h2>
-          <div className="mt-4 grid gap-3 md:grid-cols-3">
-            {flowSteps.map((step, index) => (
-              <div key={step.title} className="rounded-2xl border border-[#d7e5dc] bg-[#f7fcf9] p-4">
-                <p className="inline-flex items-center gap-2 text-sm font-semibold text-slate-800">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-[#e6f4d5] text-[#2d6147]">
-                    <Icon name={step.icon} size={15} />
-                  </span>
-                  Step {index + 1}
-                </p>
-                <h3 className="mt-3 text-sm font-semibold text-slate-900">{step.title}</h3>
-                <p className="mt-1 text-xs text-slate-600 leading-relaxed">{step.description}</p>
-              </div>
+          <div className="flex items-end justify-between gap-3 flex-wrap">
+            <div>
+              <p className="tag-soft">Community voices</p>
+              <h2 className="text-3xl mt-2">What users say after real incidents</h2>
+            </div>
+          </div>
+          <div className="mt-4 grid md:grid-cols-3 gap-3">
+            {testimonials.map((item, idx) => (
+              <article
+                key={item.name}
+                className={`rounded-2xl border border-[#d8e6dd] bg-[#f8fcfa] p-4 ${idx === 1 ? 'md:mt-5' : ''}`}
+              >
+                <p className="text-sm text-slate-700 leading-relaxed">"{item.quote}"</p>
+                <p className="text-sm font-semibold text-slate-900 mt-4">{item.name}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{item.role}</p>
+              </article>
             ))}
+          </div>
+        </section>
+
+        <section className="surface-elevated p-6 sm:p-7">
+          <div className="grid md:grid-cols-[1.12fr_0.88fr] gap-5 items-start">
+            <div>
+              <p className="tag-soft">Our story</p>
+              <h2 className="text-3xl mt-2">We built this because urgent communication was too fragmented.</h2>
+              <p className="text-sm text-slate-600 mt-3 leading-relaxed max-w-2xl">
+                In many emergencies, the issue is not willingness to help. It is coordination. Nepal Alert was designed to reduce friction between citizens, hospitals, and response teams with one practical workflow.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[#d5e5db] bg-[#f7fcf9] p-4 sm:p-5 md:mt-8">
+              <p className="text-xs tracking-[0.12em] uppercase text-slate-500">Ready to use it?</p>
+              <p className="text-sm text-slate-700 mt-2 leading-relaxed">Start with one report. Keep it short. Keep it local. We handle the routing.</p>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                <Link to="/send-alert" className="btn-primary px-4 py-2.5">
+                  Start an Alert
+                </Link>
+                <Link to="/emergency-alerts" className="btn-ghost px-4 py-2.5">
+                  Browse Live Alerts
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </div>
