@@ -107,14 +107,14 @@ export default function Profile() {
             Update My Location
           </button>
 
-          <div className="space-y-3 border-t border-[#d7dfd2] pt-4">
+          <div className="space-y-3 border-t border-[#d3e3d9] pt-4">
             <h3 className="text-slate-900 font-semibold">Preferences</h3>
             {[
               { key: 'available_to_donate', label: 'Available to Donate Blood', icon: 'heart' },
               { key: 'receive_emergency_alerts', label: 'Receive Emergency Alerts', icon: 'alert' },
               { key: 'receive_blood_alerts', label: 'Receive Blood Request Alerts', icon: 'blood' },
             ].map((toggle) => (
-              <label key={toggle.key} className="flex items-center justify-between p-3 rounded-xl bg-[#f8faf6] cursor-pointer hover:bg-[#eef4e7] transition-colors">
+              <label key={toggle.key} className="flex items-center justify-between p-3 rounded-xl bg-[#f7fcf9] border border-[#d5e5db] cursor-pointer hover:bg-[#eef8f3] transition-colors">
                 <span className="text-sm text-slate-700 inline-flex items-center gap-2">
                   <Icon name={toggle.icon} size={14} className="text-slate-600" />
                   {toggle.label}
@@ -126,7 +126,7 @@ export default function Profile() {
                     checked={form[toggle.key] || false}
                     onChange={(e) => setForm({ ...form, [toggle.key]: e.target.checked })}
                   />
-                  <div className={`w-11 h-6 rounded-full transition-colors ${form[toggle.key] ? 'bg-success-500' : 'bg-gray-600'}`}>
+                  <div className={`w-11 h-6 rounded-full transition-colors ${form[toggle.key] ? 'bg-success-500' : 'bg-slate-500'}`}>
                     <div className={`w-5 h-5 rounded-full bg-white shadow transform transition-transform mt-0.5 ${form[toggle.key] ? 'translate-x-5.5 ml-[1px]' : 'translate-x-0.5'}`}></div>
                   </div>
                 </div>
