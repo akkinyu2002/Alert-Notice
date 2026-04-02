@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { login as loginApi } from '../services/api';
-import Icon from '../components/ui/Icon';
 
 export default function Login({ adminOnly = false }) {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -38,8 +37,8 @@ export default function Login({ adminOnly = false }) {
       <div className="absolute inset-0 bg-gradient-to-br from-[#dff5eb] via-[#eef8f3] to-[#d3ecdf]"></div>
       <div className="relative glass-card p-8 w-full max-w-md animate-fade-in">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white shadow-[0_10px_24px_rgba(20,101,79,0.25)]">
-            <Icon name="alert" size={24} />
+          <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white shadow-[0_10px_24px_rgba(20,101,79,0.25)] text-xs font-bold tracking-[0.12em]">
+            AL
           </div>
           <h1 className="text-2xl font-bold text-slate-900">{adminOnly ? 'Admin Sign In' : 'Welcome Back'}</h1>
           <p className="text-slate-600 text-sm mt-1">
