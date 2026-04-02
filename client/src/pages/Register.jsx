@@ -50,10 +50,10 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#dbf5e8] via-[#edf7ef] to-[#cdecd9]"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-[#def5ea] via-[#eef8f3] to-[#d3ecdf]"></div>
       <div className="relative glass-card p-8 w-full max-w-lg animate-fade-in">
         <div className="text-center mb-8">
-          <div className="w-14 h-14 bg-gradient-to-br from-success-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white">
+          <div className="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl flex items-center justify-center mx-auto mb-4 text-white shadow-[0_10px_24px_rgba(20,101,79,0.25)]">
             <Icon name="heart" size={24} />
           </div>
           <h1 className="text-2xl font-bold text-slate-900">Join Nepal Alert</h1>
