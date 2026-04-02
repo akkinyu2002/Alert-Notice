@@ -1,0 +1,22 @@
+# Dependencies
+**/node_modules/
+
+# Build outputs
+client/dist/
+
+# Runtime logs
+*.log
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Server runtime database artifacts
+server/db/*.db
+server/db/*.db-wal
+server/db/*.db-shm
+
+# OS files
+.DS_Store
+Thumbs.db
