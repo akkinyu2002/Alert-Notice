@@ -41,7 +41,7 @@ export default function BloodRequests() {
           >
             <div className="flex items-start justify-between mb-3">
               <span className={urgencyConfig[req.urgency]?.class || 'badge-active'}>{req.urgency}</span>
-              <div className="w-12 h-12 rounded-xl bg-danger-500/20 border border-danger-500/30 flex items-center justify-center text-danger-400 font-bold text-lg">
+              <div className="w-12 h-12 rounded-xl bg-danger-500/15 border border-danger-500/25 flex items-center justify-center text-danger-500 font-bold text-lg">
                 {req.blood_group}
               </div>
             </div>
@@ -61,7 +61,7 @@ export default function BloodRequests() {
                 Expires: {new Date(req.expires_at).toLocaleDateString()}
               </p>
             </div>
-            <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#e4ebdf]">
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#dde9e1]">
               <span className="text-xs text-success-400 inline-flex items-center gap-1">
                 <Icon name="check" size={13} />
                 {req.willing_count || 0} willing
