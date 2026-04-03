@@ -11,6 +11,10 @@ const donorResponseRoutes = require('./routes/donorResponses');
 const notificationRoutes = require('./routes/notifications');
 
 const app = express();
+const isProduction = process.env.NODE_ENV === 'production';
+const enableRateLimit = process.env.RATE_LIMIT_ENABLED
+  ? process.env.RATE_LIMIT_ENABLED === 'true'
+  : isProduction;
 
 // Security
 app.use(helmet());
@@ -21,10 +25,15 @@ app.use(cors({
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100
+  windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000), // 15 minutes
+  max: Number(process.env.RATE_LIMIT_MAX || (isProduction ? 100 : 1000)),
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please try again shortly.' },
 });
-app.use('/api/', limiter);
+if (enableRateLimit) {
+  app.use('/api/', limiter);
+}
 
 // Body parsing
 app.use(express.json());
