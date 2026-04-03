@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { createEmergencyAlert } from '../../services/api';
 import { MapContainer, TileLayer, Marker, Circle, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { playAlertSound } from '../../utils/sound';
 
 function LocationPicker({ position, setPosition }) {
   useMapEvents({
@@ -59,6 +60,7 @@ export default function CreateAlert() {
         broadcast_to_towers: form.broadcast_to_towers,
         tower_ids: towerIds,
       });
+      playAlertSound('alert');
       navigate('/admin');
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create alert');

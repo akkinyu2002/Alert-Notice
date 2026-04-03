@@ -1,16 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getNotifications, markNotificationRead, markAllNotificationsRead } from '../services/api';
+import { playAlertSound } from '../utils/sound';
 
 export default function Notifications() {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(true);
+  const previousUnreadRef = useRef(null);
 
   const fetchNotifications = () => {
     getNotifications()
       .then((r) => {
+        const nextUnreadCount = r.data.unreadCount || 0;
+        if (
+          previousUnreadRef.current !== null &&
+          nextUnreadCount > previousUnreadRef.current
+        ) {
+          playAlertSound('notification');
+        }
+        previousUnreadRef.current = nextUnreadCount;
         setNotifications(r.data.notifications);
-        setUnreadCount(r.data.unreadCount);
+        setUnreadCount(nextUnreadCount);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -18,6 +28,8 @@ export default function Notifications() {
 
   useEffect(() => {
     fetchNotifications();
+    const interval = setInterval(fetchNotifications, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleMarkRead = async (id) => {

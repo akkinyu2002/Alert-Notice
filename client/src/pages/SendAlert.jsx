@@ -4,6 +4,7 @@ import { Circle, MapContainer, Marker, TileLayer, useMapEvents } from 'react-lea
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { createEmergencyAlert, getEmergencyAlerts } from '../services/api';
+import { playAlertSound } from '../utils/sound';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -169,6 +170,7 @@ export default function SendAlert() {
       const notified = response?.data?.notifiedCount ?? 0;
       const towerStatus = response?.data?.towerBroadcast?.sent ? 'Cell tower broadcast sent.' : 'Cell tower broadcast queued.';
       setSuccess(`Alert sent successfully. ${notified} nearby app users matched. ${towerStatus}`);
+      playAlertSound('alert');
       resetForm();
       getEmergencyAlerts()
         .then((res) => setRecentAlerts((res.data || []).slice(0, 4)))
