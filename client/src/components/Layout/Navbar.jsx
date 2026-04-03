@@ -16,6 +16,12 @@ const adminLinks = [
   { to: '/admin/users', label: 'Users' },
 ];
 
+const navTabBaseClass =
+  'inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full px-3 text-sm font-medium transition-colors';
+const adminTabBaseClass =
+  'inline-flex h-8 items-center justify-center whitespace-nowrap rounded-full px-3 text-xs font-semibold transition-colors';
+const mobileTabBaseClass = 'flex items-center rounded-xl px-3 py-2 text-sm font-medium transition-colors';
+
 export default function Navbar() {
   const { user, logout, isAdmin } = useAuth();
   const location = useLocation();
@@ -39,14 +45,25 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const linkClass = (path, isAdminLink = false) => {
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
+  const linkTone = (path, isAdminLink = false) => {
     const active = path === '/'
       ? location.pathname === '/'
       : location.pathname === path || location.pathname.startsWith(`${path}/`);
     if (active) return 'bg-[#d9f0e4] text-[#14553f] shadow-[inset_0_0_0_1px_rgba(20,85,63,0.08)]';
-    return isAdminLink
-      ? 'text-slate-500 hover:text-slate-900 hover:bg-[#e9f6ef]'
-      : 'text-slate-600 hover:text-slate-900 hover:bg-[#e9f6ef]';
+    return isAdminLink ? 'text-slate-500 hover:text-slate-900 hover:bg-[#e9f6ef]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#e9f6ef]';
+  };
+
+  const linkClass = (path, isAdminLink = false) => {
+    const base = isAdminLink ? adminTabBaseClass : navTabBaseClass;
+    return `${base} ${linkTone(path, isAdminLink)}`;
+  };
+
+  const mobileLinkClass = (path, isAdminLink = false) => {
+    return `${mobileTabBaseClass} ${linkTone(path, isAdminLink)}`;
   };
 
   return (
@@ -59,8 +76,8 @@ export default function Navbar() {
         }`}
       >
         <div className="px-3 sm:px-4">
-          <div className="flex items-center justify-between min-h-[64px] gap-2">
-            <Link to="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2.5 shrink-0">
+          <div className="grid min-h-[64px] grid-cols-[auto_1fr_auto] items-center gap-3">
+            <Link to="/" className="flex items-center gap-2.5 shrink-0">
               <div className="w-9 h-9 rounded-xl bg-[#d7f2e5] text-[#155741] flex items-center justify-center border border-[#b7dfcd] text-[11px] font-bold tracking-wide">
                 NA
               </div>
@@ -70,56 +87,48 @@ export default function Navbar() {
               </div>
             </Link>
 
-            <div className="hidden lg:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`inline-flex items-center px-3 py-2 rounded-full text-sm font-medium transition-colors ${linkClass(link.to)}`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+            <div className="hidden lg:flex justify-center">
+              <div className="inline-flex items-center gap-1 rounded-full border border-[#cde0d4] bg-[#f6fbf8] p-1">
+                {navLinks.map((link) => (
+                  <Link key={link.to} to={link.to} className={linkClass(link.to)}>
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
             </div>
 
-            <div className="hidden lg:flex items-center gap-2">
+            <div className="hidden lg:flex items-center justify-end gap-2">
               {user && isAdmin ? (
                 <>
                   <Link to="/profile" className="inline-flex items-center gap-2 rounded-full border border-[#cde0d4] bg-[#f6fbf8] px-3 py-1.5 hover:bg-[#ebf7f0] transition-colors">
                     <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#d7f2e5] text-[#1f5d45] text-xs font-bold">
-                      {user.name?.charAt(0).toUpperCase()}
+                      {user.name?.charAt(0)?.toUpperCase() || 'A'}
                     </span>
-                    <span className="text-sm text-slate-700 max-w-[120px] truncate">{user.name}</span>
+                    <span className="max-w-[120px] truncate text-sm text-slate-700">{user.name}</span>
                   </Link>
-                  {isAdmin && (
-                    <div className="hidden xl:flex items-center gap-1 rounded-full border border-[#cde0d4] bg-[#f6fbf8] px-2 py-1">
-                      {adminLinks.map((link) => (
-                        <Link
-                          key={link.to}
-                          to={link.to}
-                          className={`inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${linkClass(link.to, true)}`}
-                        >
-                          {link.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+                  <div className="hidden xl:inline-flex items-center gap-1 rounded-full border border-[#cde0d4] bg-[#f6fbf8] p-1">
+                    {adminLinks.map((link) => (
+                      <Link key={link.to} to={link.to} className={linkClass(link.to, true)}>
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
                   <button
                     onClick={handleLogout}
-                    className="inline-flex items-center rounded-full border border-[#cde0d4] bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:bg-[#e9f6ef] transition-colors"
+                    className="inline-flex h-9 items-center rounded-full border border-[#cde0d4] bg-white px-3 text-sm font-medium text-slate-700 hover:bg-[#e9f6ef] transition-colors"
                   >
                     Logout
                   </button>
                 </>
               ) : (
-                <Link to={adminEntryPath} className="inline-flex items-center rounded-full bg-[#177f62] px-4 py-2 text-sm font-semibold text-white hover:bg-[#14654f] transition-colors">
+                <Link to={adminEntryPath} className="inline-flex h-9 items-center rounded-full bg-[#177f62] px-4 text-sm font-semibold text-white hover:bg-[#14654f] transition-colors">
                   Admin Panel
                 </Link>
               )}
             </div>
 
             <button
-              onClick={() => setMobileOpen(!mobileOpen)}
+              onClick={() => setMobileOpen((prev) => !prev)}
               className="lg:hidden inline-flex h-10 min-w-[80px] px-3 items-center justify-center rounded-xl border border-[#cde0d4] text-slate-700 hover:bg-[#e9f6ef] text-sm font-semibold"
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             >
@@ -135,7 +144,7 @@ export default function Navbar() {
                     key={link.to}
                     to={link.to}
                     onClick={() => setMobileOpen(false)}
-                    className={`flex items-center px-3 py-2 rounded-xl text-sm font-medium ${linkClass(link.to)}`}
+                    className={mobileLinkClass(link.to)}
                   >
                     {link.label}
                   </Link>
@@ -143,14 +152,14 @@ export default function Navbar() {
 
                 {isAdmin && (
                   <>
-                    <div className="border-t border-[#d2e3d8] my-2"></div>
+                    <div className="my-2 border-t border-[#d2e3d8]"></div>
                     <p className="px-3 text-[11px] uppercase tracking-wide font-semibold text-slate-500">Admin</p>
                     {adminLinks.map((link) => (
                       <Link
                         key={link.to}
                         to={link.to}
                         onClick={() => setMobileOpen(false)}
-                        className={`flex items-center px-3 py-2 rounded-xl text-sm font-medium ${linkClass(link.to, true)}`}
+                        className={mobileLinkClass(link.to, true)}
                       >
                         {link.label}
                       </Link>
@@ -158,7 +167,7 @@ export default function Navbar() {
                   </>
                 )}
 
-                <div className="border-t border-[#d2e3d8] my-2"></div>
+                <div className="my-2 border-t border-[#d2e3d8]"></div>
                 {user && isAdmin ? (
                   <>
                     <Link

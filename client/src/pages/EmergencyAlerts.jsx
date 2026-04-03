@@ -38,13 +38,23 @@ export default function EmergencyAlerts() {
 
   return (
     <div className="page-container">
-      <div className="flex items-center justify-between mb-6">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 className="section-title mb-0">Emergency Alerts</h1>
-        <div className="flex gap-2">
-          <button onClick={() => setView('cards')} className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${view === 'cards' ? 'bg-[#dff2e8] text-[#124f3d]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#edf8f3]'}`}>
+        <div className="inline-flex items-center rounded-xl border border-[#d0e2d7] bg-white p-1 shadow-sm">
+          <button
+            onClick={() => setView('cards')}
+            className={`min-w-[84px] rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              view === 'cards' ? 'bg-[#dff2e8] text-[#124f3d]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#edf8f3]'
+            }`}
+          >
             Cards
           </button>
-          <button onClick={() => setView('map')} className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${view === 'map' ? 'bg-[#dff2e8] text-[#124f3d]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#edf8f3]'}`}>
+          <button
+            onClick={() => setView('map')}
+            className={`min-w-[84px] rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+              view === 'map' ? 'bg-[#dff2e8] text-[#124f3d]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#edf8f3]'
+            }`}
+          >
             Map
           </button>
         </div>
