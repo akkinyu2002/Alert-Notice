@@ -185,10 +185,7 @@ export default function SendAlert() {
       <section className="surface-elevated p-4 sm:p-6 lg:p-7">
         <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="surface-subtle p-5 sm:p-6 lg:p-7">
-            <span className="tag-soft gap-2">
-              <span className="h-2 w-2 rounded-full bg-[#1f946b]"></span>
-              No Login Required
-            </span>
+            <span className="tag-soft">No Login Required</span>
 
             <h1 className="mt-4 text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 leading-tight">
               Send an emergency alert in seconds.
