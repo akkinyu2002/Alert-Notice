@@ -140,11 +140,6 @@ export default function Home() {
                 <Link to="/blood-requests" className="btn-ghost px-6 py-3">
                   View Blood Requests
                 </Link>
-                {!user && (
-                  <Link to="/register" className="btn-ghost px-6 py-3">
-                    Create Account
-                  </Link>
-                )}
               </div>
 
               <p className="text-xs text-slate-500 max-w-md">
