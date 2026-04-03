@@ -17,7 +17,7 @@ const adminLinks = [
 ];
 
 const navTabBaseClass =
-  'inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full px-3 text-sm font-medium transition-colors';
+  'inline-flex h-10 items-center justify-center whitespace-nowrap rounded-xl px-3.5 text-sm font-medium transition-colors';
 const adminTabBaseClass =
   'inline-flex h-8 items-center justify-center whitespace-nowrap rounded-full px-3 text-xs font-semibold transition-colors';
 const mobileTabBaseClass = 'flex items-center rounded-xl px-3 py-2 text-sm font-medium transition-colors';
@@ -53,8 +53,8 @@ export default function Navbar() {
     const active = path === '/'
       ? location.pathname === '/'
       : location.pathname === path || location.pathname.startsWith(`${path}/`);
-    if (active) return 'bg-[#d9f0e4] text-[#14553f] shadow-[inset_0_0_0_1px_rgba(20,85,63,0.08)]';
-    return isAdminLink ? 'text-slate-500 hover:text-slate-900 hover:bg-[#e9f6ef]' : 'text-slate-600 hover:text-slate-900 hover:bg-[#e9f6ef]';
+    if (active) return 'border border-[#cfe1d7] bg-white text-[#14553f] shadow-[0_2px_8px_rgba(20,85,63,0.08)]';
+    return isAdminLink ? 'text-slate-500 hover:text-slate-900 hover:bg-white/80' : 'text-slate-600 hover:text-slate-900 hover:bg-white/80';
   };
 
   const linkClass = (path, isAdminLink = false) => {
@@ -87,14 +87,12 @@ export default function Navbar() {
               </div>
             </Link>
 
-            <div className="hidden lg:flex justify-center">
-              <div className="inline-flex items-center gap-1 rounded-full border border-[#cde0d4] bg-[#f6fbf8] p-1">
-                {navLinks.map((link) => (
-                  <Link key={link.to} to={link.to} className={linkClass(link.to)}>
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+            <div className="hidden lg:flex items-center justify-center gap-1">
+              {navLinks.map((link) => (
+                <Link key={link.to} to={link.to} className={linkClass(link.to)}>
+                  {link.label}
+                </Link>
+              ))}
             </div>
 
             <div className="hidden lg:flex items-center justify-end gap-2">
