@@ -14,7 +14,7 @@ const featuredConcerns = [
     title: 'Urgent blood needs',
     detail: 'Hospitals can publish requests and get donor responses fast, in one place.',
     tone: 'from-[#c04f4f] to-[#ab3f3f]',
-    size: 'md:col-span-2 md:mt-6',
+    size: 'md:col-span-2',
   },
   {
     title: 'Flood, landslide, road blockage',
@@ -26,7 +26,7 @@ const featuredConcerns = [
     title: 'Local community incidents',
     detail: 'From suspicious activity to neighborhood risk, report it without friction.',
     tone: 'from-[#4d7a60] to-[#5f8a6f]',
-    size: 'md:col-span-3 md:-mt-4',
+    size: 'md:col-span-3',
   },
 ];
 
@@ -152,7 +152,7 @@ export default function Home() {
               </p>
             </div>
 
-            <aside className="surface-subtle p-4 sm:p-5 lg:mt-4">
+            <aside className="surface-subtle p-4 sm:p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <p className="text-xs uppercase tracking-[0.14em] text-slate-500">Live Snapshot</p>
@@ -181,7 +181,7 @@ export default function Home() {
         </section>
 
         <section className="surface-elevated p-5 sm:p-6">
-          <div className="flex flex-wrap items-end justify-between gap-3 mb-4">
+          <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="tag-soft">What people actually report</p>
               <h2 className="text-3xl mt-2">Featured alert use cases</h2>
@@ -212,10 +212,10 @@ export default function Home() {
             <p className="tag-soft">How the workflow works in practice</p>
             <h2 className="text-3xl mt-2">From report to response in three clear steps</h2>
             <div className="mt-4 space-y-3">
-              {realFlow.map((item, idx) => (
+              {realFlow.map((item) => (
                 <div
                   key={item.step}
-                  className={`rounded-2xl border border-[#d7e6dd] bg-[#f7fcf9] p-4 ${idx === 1 ? 'sm:ml-6' : ''} ${idx === 2 ? 'sm:ml-2' : ''}`}
+                  className="rounded-2xl border border-[#d7e6dd] bg-[#f7fcf9] p-4"
                 >
                   <p className="text-xs tracking-[0.12em] uppercase text-slate-500">{item.step}</p>
                   <h3 className="text-lg mt-1">{item.title}</h3>
@@ -225,7 +225,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="surface-elevated p-5 sm:p-6 lg:mt-8">
+          <div className="surface-elevated p-5 sm:p-6">
             <p className="tag-soft">Trust signals</p>
             <h2 className="text-2xl mt-2">Built with local safety teams in mind</h2>
             <div className="mt-4 grid grid-cols-2 gap-2.5">
@@ -269,7 +269,7 @@ export default function Home() {
             )}
           </div>
 
-          <div className="surface-elevated p-5 sm:p-6 lg:mt-5">
+          <div className="surface-elevated p-5 sm:p-6">
             <div className="flex items-center justify-between gap-3 mb-3">
               <h2 className="text-2xl">Open blood requests</h2>
               <Link to="/blood-requests" className="text-sm font-semibold link-accent">
@@ -300,17 +300,17 @@ export default function Home() {
         </section>
 
         <section className="surface-elevated p-5 sm:p-6">
-          <div className="flex items-end justify-between gap-3 flex-wrap">
+          <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="tag-soft">Community voices</p>
               <h2 className="text-3xl mt-2">What users say after real incidents</h2>
             </div>
           </div>
-          <div className="mt-4 grid md:grid-cols-3 gap-3">
-            {testimonials.map((item, idx) => (
+          <div className="grid gap-3 md:grid-cols-3">
+            {testimonials.map((item) => (
               <article
                 key={item.name}
-                className={`rounded-2xl border border-[#d8e6dd] bg-[#f8fcfa] p-4 ${idx === 1 ? 'md:mt-5' : ''}`}
+                className="rounded-2xl border border-[#d8e6dd] bg-[#f8fcfa] p-4"
               >
                 <p className="text-sm text-slate-700 leading-relaxed">"{item.quote}"</p>
                 <p className="text-sm font-semibold text-slate-900 mt-4">{item.name}</p>
@@ -329,7 +329,7 @@ export default function Home() {
                 In many emergencies, the issue is not willingness to help. It is coordination. Nepal Alert was designed to reduce friction between citizens, hospitals, and response teams with one practical workflow.
               </p>
             </div>
-            <div className="rounded-2xl border border-[#d5e5db] bg-[#f7fcf9] p-4 sm:p-5 md:mt-8">
+            <div className="rounded-2xl border border-[#d5e5db] bg-[#f7fcf9] p-4 sm:p-5">
               <p className="text-xs tracking-[0.12em] uppercase text-slate-500">Ready to use it?</p>
               <p className="text-sm text-slate-700 mt-2 leading-relaxed">Start with one report. Keep it short. Keep it local. We handle the routing.</p>
               <div className="mt-4 flex flex-wrap gap-2.5">
