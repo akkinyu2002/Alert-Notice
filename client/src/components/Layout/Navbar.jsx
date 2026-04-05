@@ -19,7 +19,7 @@ const adminLinks = [
 const navTabBaseClass =
   'inline-flex h-10 items-center justify-center whitespace-nowrap rounded-xl px-3.5 text-sm font-medium transition-colors';
 const adminTabBaseClass =
-  'inline-flex h-8 items-center justify-center whitespace-nowrap rounded-full px-3 text-xs font-semibold transition-colors';
+  'inline-flex h-10 items-center justify-center whitespace-nowrap rounded-xl px-4 text-sm font-semibold transition-colors';
 const mobileTabBaseClass = 'flex items-center rounded-xl px-3 py-2 text-sm font-medium transition-colors';
 
 export default function Navbar() {
@@ -104,7 +104,7 @@ export default function Navbar() {
                     </span>
                     <span className="max-w-[120px] truncate text-sm text-slate-700">{user.name}</span>
                   </Link>
-                  <div className="hidden xl:inline-flex items-center gap-1 rounded-full border border-[#cde0d4] bg-[#f6fbf8] p-1">
+                  <div className="hidden lg:inline-flex items-center gap-2 rounded-2xl border border-[#cde0d4] bg-white px-2 py-1.5 shadow-sm">
                     {adminLinks.map((link) => (
                       <Link key={link.to} to={link.to} className={linkClass(link.to, true)}>
                         {link.label}
