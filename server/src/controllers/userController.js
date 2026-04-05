@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const ADMIN_USERS_LIMIT = 4;
 
 function updateProfile(req, res) {
   try {
@@ -43,8 +44,8 @@ function getAllUsers(req, res) {
     const users = db.prepare(`
       SELECT id, name, email, phone, blood_group, age, district, latitude, longitude, 
              last_donated_at, available_to_donate, receive_emergency_alerts, receive_blood_alerts, role, created_at
-      FROM users ORDER BY created_at DESC
-    `).all();
+      FROM users ORDER BY created_at DESC LIMIT ?
+    `).all(ADMIN_USERS_LIMIT);
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: 'Failed to get users.' });

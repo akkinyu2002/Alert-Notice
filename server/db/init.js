@@ -1,6 +1,9 @@
 const db = require('../src/config/db');
 const bcrypt = require('bcryptjs');
 
+const ADMIN_PANEL_USER_LIMIT = 4;
+const DEMO_LIMIT = 2;
+
 // Create tables
 db.exec(`
   CREATE TABLE IF NOT EXISTS users (
@@ -84,9 +87,9 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_donor_responses_request ON donor_responses(request_id);
 `);
 
-console.log('✅ Database tables created successfully');
+console.log('Database tables created successfully');
 
-// Seed data
+// Seed users (4 total for admin panel)
 const adminPassword = bcrypt.hashSync('admin123', 10);
 const userPassword = bcrypt.hashSync('user123', 10);
 
@@ -98,84 +101,82 @@ const insertUser = db.prepare(`
 const users = [
   ['Admin Nepal', 'admin@alert.np', adminPassword, '9841000001', 'O+', 35, 'Kathmandu', 27.7172, 85.3240, null, 0, 'admin'],
   ['Bir Hospital', 'bir@hospital.np', adminPassword, '9841000002', null, null, 'Kathmandu', 27.7050, 85.3140, null, 0, 'hospital'],
-  ['Grande Hospital', 'grande@hospital.np', adminPassword, '9841000003', null, null, 'Kathmandu', 27.6880, 85.3340, null, 0, 'hospital'],
-  ['Ram Sharma', 'ram@gmail.com', userPassword, '9841100001', 'A+', 28, 'Kathmandu', 27.7100, 85.3200, '2024-01-15', 1, 'user'],
-  ['Sita Thapa', 'sita@gmail.com', userPassword, '9841100002', 'B+', 25, 'Kathmandu', 27.7200, 85.3100, '2024-06-20', 1, 'user'],
-  ['Hari Basnet', 'hari@gmail.com', userPassword, '9841100003', 'O+', 30, 'Lalitpur', 27.6680, 85.3206, '2024-03-10', 1, 'user'],
-  ['Gita Rai', 'gita@gmail.com', userPassword, '9841100004', 'AB+', 22, 'Bhaktapur', 27.6710, 85.4298, null, 1, 'user'],
-  ['Krishna KC', 'krishna@gmail.com', userPassword, '9841100005', 'A-', 32, 'Pokhara', 28.2096, 83.9856, '2024-08-01', 1, 'user'],
-  ['Maya Gurung', 'maya@gmail.com', userPassword, '9841100006', 'B-', 27, 'Pokhara', 28.2200, 83.9900, null, 1, 'user'],
-  ['Bikash Shrestha', 'bikash@gmail.com', userPassword, '9841100007', 'O-', 29, 'Kathmandu', 27.7300, 85.3400, '2024-09-15', 1, 'user'],
-  ['Anita Tamang', 'anita@gmail.com', userPassword, '9841100008', 'A+', 24, 'Lalitpur', 27.6600, 85.3100, null, 1, 'user'],
-  ['Dipak Magar', 'dipak@gmail.com', userPassword, '9841100009', 'B+', 31, 'Butwal', 27.7006, 83.4483, '2024-07-20', 1, 'user'],
-];
+  ['Demo Donor One', 'donor1@example.com', userPassword, '9841100001', 'A+', 28, 'Kathmandu', 27.7100, 85.3200, '2024-01-15', 1, 'user'],
+  ['Demo Donor Two', 'donor2@example.com', userPassword, '9841100002', 'B+', 32, 'Kathmandu', 27.7150, 85.3300, null, 1, 'user'],
+].slice(0, ADMIN_PANEL_USER_LIMIT);
 
 const insertMany = db.transaction(() => {
-  for (const u of users) {
-    insertUser.run(...u);
+  for (const user of users) {
+    insertUser.run(...user);
   }
 });
 insertMany();
-console.log('✅ Users seeded');
+console.log('Users seeded');
 
-// Seed emergency alerts
+const getUserId = db.prepare('SELECT id FROM users WHERE email = ?');
+const adminUserId = getUserId.get('admin@alert.np')?.id;
+const hospitalUserId = getUserId.get('bir@hospital.np')?.id;
+const donorOneId = getUserId.get('donor1@example.com')?.id;
+const donorTwoId = getUserId.get('donor2@example.com')?.id;
+
+if (!adminUserId || !hospitalUserId || !donorOneId || !donorTwoId) {
+  throw new Error('Required seed users were not found.');
+}
+
+// Seed emergency alerts (max 2 demos)
 const insertAlert = db.prepare(`
   INSERT OR IGNORE INTO emergency_alerts (title, description, type, severity, radius_km, latitude, longitude, expires_at, created_by)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 `);
 
 const alerts = [
-  ['Flood Warning - Bagmati River', 'Heavy rainfall expected. Bagmati river water level rising rapidly. Evacuate low-lying areas immediately.', 'flood', 'critical', 15, 27.7000, 85.3300, '2026-04-05 23:59:59', 1],
-  ['Road Blockage - Prithvi Highway', 'Landslide near Mugling. Prithvi Highway blocked. Avoid travel between Mugling-Narayanghat section.', 'road_blockage', 'high', 20, 27.8700, 84.5600, '2026-04-03 18:00:00', 1],
-  ['Fire Alert - Thamel Area', 'Fire reported in commercial building near Thamel Chowk. Fire brigade on the way. Stay away from the area.', 'fire', 'medium', 5, 27.7153, 85.3126, '2026-04-02 12:00:00', 1],
-];
+  ['Flood Warning - Kathmandu Valley', 'Heavy rainfall expected. Kathmandu valley at risk. Stay alert and avoid flooded areas.', 'flood', 'high', 15, 27.7172, 85.3240, '2026-04-10 23:59:59', adminUserId],
+  ['Road Blockage - Ring Road Section', 'Traffic disruption reported near major junctions. Use alternate routes and avoid congested sections.', 'road_blockage', 'medium', 8, 27.7090, 85.3320, '2026-04-12 23:59:59', adminUserId],
+].slice(0, DEMO_LIMIT);
 
 const insertAlerts = db.transaction(() => {
-  for (const a of alerts) {
-    insertAlert.run(...a);
+  for (const alert of alerts) {
+    insertAlert.run(...alert);
   }
 });
 insertAlerts();
-console.log('✅ Emergency alerts seeded');
+console.log('Emergency alerts seeded');
 
-// Seed blood requests
+// Seed blood requests (max 2 demos)
 const insertBlood = db.prepare(`
   INSERT OR IGNORE INTO blood_requests (hospital_name, blood_group, units_needed, urgency, contact_number, latitude, longitude, radius_km, expires_at, created_by)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `);
 
 const bloodRequests = [
-  ['Bir Hospital', 'A+', 3, 'critical', '01-4221119', 27.7050, 85.3140, 8, '2026-04-03 23:59:59', 2],
-  ['Grande Hospital', 'O+', 2, 'urgent', '01-5159266', 27.6880, 85.3340, 6, '2026-04-04 23:59:59', 3],
-  ['Bir Hospital', 'B+', 1, 'normal', '01-4221119', 27.7050, 85.3140, 10, '2026-04-05 23:59:59', 2],
-];
+  ['Bir Hospital', 'A+', 3, 'critical', '01-4221119', 27.7050, 85.3140, 8, '2026-04-10 23:59:59', hospitalUserId],
+  ['Bir Hospital', 'O+', 2, 'urgent', '01-4221119', 27.7050, 85.3140, 8, '2026-04-12 23:59:59', hospitalUserId],
+].slice(0, DEMO_LIMIT);
 
 const insertBloods = db.transaction(() => {
-  for (const b of bloodRequests) {
-    insertBlood.run(...b);
+  for (const bloodRequest of bloodRequests) {
+    insertBlood.run(...bloodRequest);
   }
 });
 insertBloods();
-console.log('✅ Blood requests seeded');
+console.log('Blood requests seeded');
 
-// Seed some notifications
+// Seed notifications (max 2 demos)
 const insertNotif = db.prepare(`
   INSERT OR IGNORE INTO notifications (user_id, title, message, type, reference_id, reference_type)
   VALUES (?, ?, ?, ?, ?, ?)
 `);
 
-const notifs = [
-  [4, '🚨 Flood Warning', 'Heavy rainfall warning for Bagmati River area. Stay safe!', 'emergency', 1, 'emergency_alert'],
-  [5, '🚨 Flood Warning', 'Heavy rainfall warning for Bagmati River area. Stay safe!', 'emergency', 1, 'emergency_alert'],
-  [4, '🩸 Blood Needed: A+', 'Bir Hospital urgently needs A+ blood. Can you donate?', 'blood_request', 1, 'blood_request'],
-  [11, '🩸 Blood Needed: A+', 'Bir Hospital urgently needs A+ blood. Can you donate?', 'blood_request', 1, 'blood_request'],
-];
+const notifications = [
+  [donorOneId, 'Flood Warning', 'Heavy rainfall warning for Kathmandu Valley. Stay safe!', 'emergency', null, null],
+  [donorTwoId, 'Blood Needed: A+', 'Bir Hospital urgently needs A+ blood. Can you donate?', 'blood_request', null, null],
+].slice(0, DEMO_LIMIT);
 
 const insertNotifs = db.transaction(() => {
-  for (const n of notifs) {
-    insertNotif.run(...n);
+  for (const notification of notifications) {
+    insertNotif.run(...notification);
   }
 });
 insertNotifs();
-console.log('✅ Notifications seeded');
-console.log('\\n🎉 Database initialization complete!');
+console.log('Notifications seeded');
+console.log('\nDatabase initialization complete');
