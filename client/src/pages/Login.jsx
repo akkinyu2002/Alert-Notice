@@ -100,7 +100,6 @@ export default function Login({ adminOnly = false }) {
               : [
                   { label: 'Admin', email: 'admin@alert.np', pass: 'admin123' },
                   { label: 'Hospital', email: 'bir@hospital.np', pass: 'admin123' },
-                  { label: 'User', email: 'ram@gmail.com', pass: 'user123' },
                 ]
             ).map((acc) => (
               <button

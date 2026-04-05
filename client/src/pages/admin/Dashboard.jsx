@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getUserStats, getAllEmergencyAlerts, getAllBloodRequests } from '../../services/api';
 
+const DEMO_LIST_LIMIT = 2;
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [alerts, setAlerts] = useState([]);
@@ -12,10 +14,10 @@ export default function AdminDashboard() {
       .then((r) => setStats(r.data))
       .catch(() => {});
     getAllEmergencyAlerts()
-      .then((r) => setAlerts(r.data.slice(0, 5)))
+      .then((r) => setAlerts(r.data.slice(0, DEMO_LIST_LIMIT)))
       .catch(() => {});
     getAllBloodRequests()
-      .then((r) => setBloodReqs(r.data.slice(0, 5)))
+      .then((r) => setBloodReqs(r.data.slice(0, DEMO_LIST_LIMIT)))
       .catch(() => {});
   }, []);
 

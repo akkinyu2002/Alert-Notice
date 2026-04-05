@@ -66,6 +66,8 @@ const testimonials = [
   },
 ];
 
+const DEMO_LIST_LIMIT = 2;
+
 function severityTone(severity) {
   const map = {
     critical: 'badge-critical',
@@ -93,11 +95,11 @@ export default function Home() {
 
   useEffect(() => {
     getEmergencyAlerts()
-      .then((r) => setAlerts((r.data || []).slice(0, 3)))
+      .then((r) => setAlerts((r.data || []).slice(0, DEMO_LIST_LIMIT)))
       .catch(() => {});
 
     getBloodRequests()
-      .then((r) => setBloodRequests((r.data || []).slice(0, 3)))
+      .then((r) => setBloodRequests((r.data || []).slice(0, DEMO_LIST_LIMIT)))
       .catch(() => {});
 
     if (user) {
@@ -301,8 +303,8 @@ export default function Home() {
               <h2 className="text-3xl mt-2">What users say after real incidents</h2>
             </div>
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
-            {testimonials.map((item) => (
+          <div className="grid gap-3 md:grid-cols-2">
+            {testimonials.slice(0, DEMO_LIST_LIMIT).map((item) => (
               <article
                 key={item.name}
                 className="rounded-2xl border border-[#d8e6dd] bg-[#f8fcfa] p-4"
