@@ -55,3 +55,16 @@ Alert-Notice/
 ├── .env.example # Environment variables template 
 └── .gitignore 
 # Git ignore rules
+
+## Installation
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Setup
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/akkinyu2002/Alert-Notice.git
+   cd Alert-Notice
