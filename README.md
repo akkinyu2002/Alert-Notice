@@ -38,3 +38,4 @@ A comprehensive emergency and blood request alert system built with modern web t
 - **Dotenv** - Environment variable management
 
 ## Project Structure
+Alert-Notice/ ├── client/ # React frontend application │ ├── src/ # Source files │ ├── public/ # Static assets │ ├── package.json # Client dependencies │ ├── vite.config.js # Vite configuration │ ├── tailwind.config.js # Tailwind CSS configuration │ └── index.html # HTML entry point │ ├── server/ # Express backend application │ ├── src/ # Source files (routes, controllers, middleware) │ ├── db/ # Database initialization and schema │ ├── package.json # Server dependencies │ ├── server.js # Entry point │ └── db/init.js # Database initialization script │ ├── .env.example # Environment variables template └── .gitignore # Git ignore rules
