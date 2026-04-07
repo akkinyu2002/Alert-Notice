@@ -1,12 +1,67 @@
 const db = require('../config/db');
 const { findUsersForEmergencyAlert } = require('../services/matchingService');
 const { broadcastEmergencyToCellTowers, sanitizeTowerIds } = require('../services/cellBroadcastService');
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+
+const ALERT_IMAGE_DIR = path.join(__dirname, '..', '..', 'uploads', 'alerts');
+const MAX_IMAGE_BYTES = Number(process.env.ALERT_IMAGE_MAX_BYTES || 3 * 1024 * 1024);
+const ALLOWED_IMAGE_MIMES = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+};
+
+function parseAndSaveAlertImage(imageData) {
+  const match = String(imageData || '').match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,([\s\S]+)$/);
+  if (!match) {
+    const err = new Error('Invalid image format.');
+    err.code = 'INVALID_IMAGE_DATA';
+    throw err;
+  }
+
+  const mime = match[1].toLowerCase();
+  const extension = ALLOWED_IMAGE_MIMES[mime];
+  if (!extension) {
+    const err = new Error('Only JPG, PNG, and WEBP images are supported.');
+    err.code = 'UNSUPPORTED_IMAGE_TYPE';
+    throw err;
+  }
+
+  const imageBuffer = Buffer.from(match[2].replace(/\s/g, ''), 'base64');
+  if (!imageBuffer.length) {
+    const err = new Error('Image payload is empty.');
+    err.code = 'INVALID_IMAGE_DATA';
+    throw err;
+  }
+
+  if (imageBuffer.length > MAX_IMAGE_BYTES) {
+    const err = new Error(`Image too large. Max size is ${Math.floor(MAX_IMAGE_BYTES / (1024 * 1024))}MB.`);
+    err.code = 'IMAGE_TOO_LARGE';
+    throw err;
+  }
+
+  fs.mkdirSync(ALERT_IMAGE_DIR, { recursive: true });
+  const fileName = `alert-${Date.now()}-${crypto.randomBytes(6).toString('hex')}.${extension}`;
+  const filePath = path.join(ALERT_IMAGE_DIR, fileName);
+  fs.writeFileSync(filePath, imageBuffer);
+
+  return {
+    imageUrl: `/api/uploads/alerts/${fileName}`,
+    filePath,
+  };
+}
 
 async function createAlert(req, res) {
+  let savedImagePath = null;
+
   try {
     const {
       title,
       description,
+      image_data,
       type,
       severity,
       radius_km,
@@ -51,14 +106,25 @@ async function createAlert(req, res) {
       });
     }
 
+    let imageUrl = null;
+    if (typeof image_data === 'string' && image_data.trim()) {
+      try {
+        const savedImage = parseAndSaveAlertImage(image_data.trim());
+        imageUrl = savedImage.imageUrl;
+        savedImagePath = savedImage.filePath;
+      } catch (imageErr) {
+        return res.status(400).json({ error: imageErr.message || 'Invalid image upload.' });
+      }
+    }
+
     const creatorId = req.user?.id || null;
 
     const result = db
       .prepare(`
-      INSERT INTO emergency_alerts (title, description, type, severity, radius_km, latitude, longitude, expires_at, created_by)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO emergency_alerts (title, description, image_url, type, severity, radius_km, latitude, longitude, expires_at, created_by)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `)
-      .run(title, description || '', type, severity, radiusKm, lat, lng, expires_at, creatorId);
+      .run(title, description || '', imageUrl, type, severity, radiusKm, lat, lng, expires_at, creatorId);
 
     const alert = db.prepare('SELECT * FROM emergency_alerts WHERE id = ?').get(result.lastInsertRowid);
 
@@ -89,6 +155,13 @@ async function createAlert(req, res) {
       towerBroadcast,
     });
   } catch (err) {
+    if (savedImagePath) {
+      try {
+        fs.unlinkSync(savedImagePath);
+      } catch (_) {
+        // noop
+      }
+    }
     console.error('Create alert error:', err);
     res.status(500).json({ error: 'Failed to create alert.' });
   }
