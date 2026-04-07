@@ -30,6 +30,7 @@ db.exec(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     description TEXT,
+    image_url TEXT,
     type TEXT NOT NULL CHECK(type IN ('flood', 'fire', 'earthquake', 'road_blockage', 'landslide', 'public_danger', 'other')),
     severity TEXT NOT NULL CHECK(severity IN ('low', 'medium', 'high', 'critical')),
     radius_km REAL DEFAULT 10,
