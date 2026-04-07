@@ -255,6 +255,13 @@ export default function Home() {
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <h3 className="text-sm font-semibold text-slate-900">{alert.title}</h3>
+                        {alert.image_url && (
+                          <img
+                            src={alert.image_url}
+                            alt={`Evidence for ${alert.title}`}
+                            className="mt-1.5 h-24 w-full rounded-lg border border-[#d5e5db] object-cover"
+                          />
+                        )}
                         <p className="text-xs text-slate-600 mt-1 line-clamp-2">{alert.description || 'Emergency alert submitted.'}</p>
                       </div>
                       <span className={`badge ${severityTone(alert.severity)}`}>{alert.severity}</span>
