@@ -7,6 +7,7 @@ const urgencyConfig = {
   urgent: { class: 'badge-urgent', bg: 'border-l-orange-500' },
   normal: { class: 'badge-active', bg: 'border-l-success-500' },
 };
+const DEMO_LIST_LIMIT = 2;
 
 export default function BloodRequests() {
   const [requests, setRequests] = useState([]);
@@ -14,7 +15,7 @@ export default function BloodRequests() {
 
   useEffect(() => {
     getBloodRequests()
-      .then((r) => setRequests(r.data))
+      .then((r) => setRequests((r.data || []).slice(0, DEMO_LIST_LIMIT)))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
