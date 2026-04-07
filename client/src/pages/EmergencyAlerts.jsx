@@ -12,6 +12,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const severityColors = { critical: '#ef4444', high: '#f97316', medium: '#eab308', low: '#22c55e' };
+const DEMO_LIST_LIMIT = 2;
 const typeIcons = {
   flood: 'wave',
   fire: 'fire',
@@ -29,7 +30,7 @@ export default function EmergencyAlerts() {
 
   useEffect(() => {
     getEmergencyAlerts()
-      .then((r) => setAlerts(r.data))
+      .then((r) => setAlerts((r.data || []).slice(0, DEMO_LIST_LIMIT)))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -76,6 +77,13 @@ export default function EmergencyAlerts() {
                 <span className="badge bg-[#f7fcf9] text-slate-600 border border-[#d3e4da]">{alert.type.replace('_', ' ')}</span>
               </div>
               <h3 className="text-slate-900 font-semibold text-lg mb-2">{alert.title}</h3>
+              {alert.image_url && (
+                <img
+                  src={alert.image_url}
+                  alt={`Evidence for ${alert.title}`}
+                  className="mb-3 h-40 w-full rounded-xl border border-[#d5e5db] object-cover"
+                />
+              )}
               <p className="text-sm text-slate-600 mb-4">{alert.description}</p>
               <div className="flex items-center justify-between text-xs text-slate-500 border-t border-[#dfe9e2] pt-3">
                 <span>{alert.radius_km}km radius</span>
