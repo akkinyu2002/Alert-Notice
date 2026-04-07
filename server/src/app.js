@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const fs = require('fs');
+const path = require('path');
 
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
@@ -15,6 +17,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 const enableRateLimit = process.env.RATE_LIMIT_ENABLED
   ? process.env.RATE_LIMIT_ENABLED === 'true'
   : isProduction;
+const uploadsDir = path.join(__dirname, '..', 'uploads');
+
+fs.mkdirSync(uploadsDir, { recursive: true });
 
 // Security
 app.use(helmet());
@@ -36,7 +41,8 @@ if (enableRateLimit) {
 }
 
 // Body parsing
-app.use(express.json());
+app.use(express.json({ limit: '8mb' }));
+app.use('/api/uploads', express.static(uploadsDir));
 
 // Routes
 app.use('/api/auth', authRoutes);
