@@ -51,6 +51,18 @@ const QUICK_PRESETS = [
   },
 ];
 
+const DEMO_LIST_LIMIT = 2;
+const MAX_ALERT_IMAGE_MB = 3;
+
+function fileToDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('Could not read image file.'));
+    reader.readAsDataURL(file);
+  });
+}
+
 function LocationPicker({ position, onPick }) {
   useMapEvents({
     click(event) {
@@ -88,6 +100,8 @@ export default function SendAlert() {
   const [recentAlerts, setRecentAlerts] = useState([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [proofImageData, setProofImageData] = useState('');
+  const [proofImagePreview, setProofImagePreview] = useState('');
 
   const expiryHint = useMemo(() => {
     const date = form.expires_at ? new Date(form.expires_at) : new Date(Date.now() + 3 * 60 * 60 * 1000);
@@ -96,7 +110,7 @@ export default function SendAlert() {
 
   useEffect(() => {
     getEmergencyAlerts()
-      .then((res) => setRecentAlerts((res.data || []).slice(0, 4)))
+      .then((res) => setRecentAlerts((res.data || []).slice(0, DEMO_LIST_LIMIT)))
       .catch(() => {})
       .finally(() => setLoadingAlerts(false));
   }, []);
@@ -134,6 +148,37 @@ export default function SendAlert() {
     }));
   };
 
+  const handleImageChange = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      setProofImageData('');
+      setProofImagePreview('');
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setError('Only image files are allowed.');
+      event.target.value = '';
+      return;
+    }
+
+    if (file.size > MAX_ALERT_IMAGE_MB * 1024 * 1024) {
+      setError(`Image too large. Max size is ${MAX_ALERT_IMAGE_MB}MB.`);
+      event.target.value = '';
+      return;
+    }
+
+    try {
+      const dataUrl = await fileToDataUrl(file);
+      setError('');
+      setProofImageData(dataUrl);
+      setProofImagePreview(dataUrl);
+    } catch (_) {
+      setError('Could not read image file. Please try another image.');
+      event.target.value = '';
+    }
+  };
+
   const resetForm = () => {
     setForm((prev) => ({
       ...prev,
@@ -144,6 +189,8 @@ export default function SendAlert() {
       radius_km: 8,
       expires_at: '',
     }));
+    setProofImageData('');
+    setProofImagePreview('');
   };
 
   const handleSubmit = async (event) => {
@@ -158,6 +205,7 @@ export default function SendAlert() {
       const response = await createEmergencyAlert({
         title: form.title.trim(),
         description: form.description.trim(),
+        image_data: proofImageData || null,
         type: form.type,
         severity: form.severity,
         radius_km: Number(form.radius_km),
@@ -173,7 +221,7 @@ export default function SendAlert() {
       playAlertSound('alert');
       resetForm();
       getEmergencyAlerts()
-        .then((res) => setRecentAlerts((res.data || []).slice(0, 4)))
+        .then((res) => setRecentAlerts((res.data || []).slice(0, DEMO_LIST_LIMIT)))
         .catch(() => {});
     } catch (err) {
       setError(err.response?.data?.error || 'Could not send alert. Please try again.');
@@ -242,6 +290,24 @@ export default function SendAlert() {
                   onChange={(event) => setForm((prev) => ({ ...prev, description: event.target.value }))}
                   placeholder="Tell responders and nearby people what is happening."
                 />
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-slate-700 mb-1.5 block">Attach Proof Image (Optional)</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="input-field"
+                  onChange={handleImageChange}
+                />
+                <p className="mt-1 text-xs text-slate-500">JPG, PNG, WEBP up to {MAX_ALERT_IMAGE_MB}MB</p>
+                {proofImagePreview && (
+                  <img
+                    src={proofImagePreview}
+                    alt="Alert proof preview"
+                    className="mt-2 h-28 w-full rounded-xl border border-[#d5e5db] object-cover"
+                  />
+                )}
               </div>
 
               <div className="grid sm:grid-cols-2 gap-3">
@@ -340,6 +406,13 @@ export default function SendAlert() {
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="text-sm font-semibold text-slate-900">{alert.title}</p>
+                        {alert.image_url && (
+                          <img
+                            src={alert.image_url}
+                            alt={`Evidence for ${alert.title}`}
+                            className="mt-1.5 h-24 w-full rounded-lg border border-[#d5e5db] object-cover"
+                          />
+                        )}
                         <p className="text-xs text-slate-600 mt-0.5 line-clamp-2">{alert.description || 'Emergency alert submitted.'}</p>
                       </div>
                       <span className={`inline-flex rounded-full border px-2 py-0.5 text-[11px] font-semibold ${badgeTone(alert.severity)}`}>
